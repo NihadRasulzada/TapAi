@@ -19,7 +19,7 @@ public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_opts.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Sub,        user.Id.ToString()),
@@ -28,6 +28,9 @@ public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
             new Claim(JwtRegisteredClaimNames.Jti,        Guid.NewGuid().ToString()),
         };
+
+        if (user.IsAdmin)
+            claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
         var token = new JwtSecurityToken(
             issuer: _opts.Issuer,

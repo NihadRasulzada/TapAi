@@ -108,9 +108,10 @@ public sealed class AuthController(ICommandDispatcher commandDispatcher) : Contr
     /// Müəyyən istifadəçini bloklayır.
     /// </summary>
     [HttpPost("users/{userId:guid}/block")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> BlockUser(
         [FromRoute] Guid userId,
@@ -127,9 +128,10 @@ public sealed class AuthController(ICommandDispatcher commandDispatcher) : Contr
     /// Bloklanmış istifadəçini blokdan çıxarır.
     /// </summary>
     [HttpPost("users/{userId:guid}/unblock")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnblockUser(
         [FromRoute] Guid userId, CancellationToken ct)

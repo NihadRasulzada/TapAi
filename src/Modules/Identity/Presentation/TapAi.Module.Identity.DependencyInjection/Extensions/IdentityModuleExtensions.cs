@@ -78,6 +78,7 @@ public static class IdentityModuleExtensions
         services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
         services.AddScoped<IRegistrationJwtService, RegistrationJwtService>();
         services.AddSingleton<IOtpService, RedisOtpService>();
+        services.AddSingleton<ILoginRateLimitService, RedisLoginRateLimitService>();
         services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
 
         // ── Handlers ──────────────────────────────────────────────────────────

@@ -69,6 +69,9 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Command
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsBlocked")
                         .HasColumnType("boolean");
 

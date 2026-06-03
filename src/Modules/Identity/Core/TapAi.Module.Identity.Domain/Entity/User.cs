@@ -9,6 +9,7 @@ public class User : BaseEntity
     public string PasswordHash { get; private set; } = string.Empty;
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
+    public bool IsAdmin { get; private set; }
     public bool IsBlocked { get; private set; }
     public int FailedLoginCount { get; private set; }
     public long? BlockedUntilSeconds { get; private set; }
@@ -28,6 +29,26 @@ public class User : BaseEntity
             PasswordHash = passwordHash,
             FirstName = firstName,
             LastName = lastName,
+            IsAdmin = false,
+            IsBlocked = false,
+            FailedLoginCount = 0
+        };
+    }
+
+    public static User CreateAdmin(
+        string phoneNumber,
+        string passwordHash,
+        string firstName,
+        string lastName)
+    {
+        return new User(Guid.NewGuid())
+        {
+            PhoneNumber = phoneNumber,
+            NormalizedPhoneNumber = phoneNumber.ToUpperInvariant(),
+            PasswordHash = passwordHash,
+            FirstName = firstName,
+            LastName = lastName,
+            IsAdmin = true,
             IsBlocked = false,
             FailedLoginCount = 0
         };

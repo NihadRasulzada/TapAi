@@ -34,6 +34,7 @@ public sealed class UserConfiguration : BaseEntityConfiguration<User>
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(u => u.IsAdmin).IsRequired();
         builder.Property(u => u.IsBlocked).IsRequired();
         builder.Property(u => u.FailedLoginCount).IsRequired();
 

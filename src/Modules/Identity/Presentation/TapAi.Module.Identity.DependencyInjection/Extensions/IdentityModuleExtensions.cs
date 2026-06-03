@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using TapAi.Module.Identity.Application.Common.Interfaces;
 using TapAi.Module.Identity.Application.Common.Settings;
+using TapAi.Module.Identity.Domain.Entity;
 using TapAi.Module.Identity.Infrastructure.EmailWorker;
 using TapAi.Module.Identity.Infrastructure.Messaging;
 using TapAi.Module.Identity.Infrastructure.Options;
@@ -149,5 +150,55 @@ public static class IdentityModuleExtensions
         await queryCtx.Database.MigrateAsync();
 
         logger.LogInformation("[Identity] Migration tamamlandı.");
+    }
+
+    /// <summary>
+    /// Admin istifadəçisi DB-də yoxdursa, env-dən oxuyaraq yaradır.
+    /// Migrasiyanın tamamlanmasından SONRA çağırılmalıdır.
+    /// </summary>
+    public static async Task SeedIdentityAsync(this IServiceProvider services)
+    {
+        var config  = services.GetRequiredService<IConfiguration>();
+        var logger  = services.GetRequiredService<ILogger<CommandDbContext>>();
+        var hasher  = services.GetRequiredService<IPasswordHasher>();
+
+        var phone     = config[$"{SeedAdminSettings.SectionName}:PhoneNumber"];
+        var password  = config[$"{SeedAdminSettings.SectionName}:Password"];
+        var firstName = config[$"{SeedAdminSettings.SectionName}:FirstName"];
+        var lastName  = config[$"{SeedAdminSettings.SectionName}:LastName"];
+
+        if (string.IsNullOrWhiteSpace(phone) || string.IsNullOrWhiteSpace(password))
+        {
+            logger.LogWarning("[Identity] AdminSeed:PhoneNumber və ya AdminSeed:Password təyin edilməyib. Admin seed keçilir.");
+            return;
+        }
+
+        var commandConnStr = config.GetConnectionString("CommandDb")
+            ?? throw new InvalidOperationException("ConnectionStrings:CommandDb tapılmadı.");
+
+        await using var ctx = new CommandDbContext(
+            new DbContextOptionsBuilder<CommandDbContext>()
+                .UseNpgsql(commandConnStr)
+                .Options);
+
+        var normalized = phone.ToUpperInvariant();
+        var exists = await ctx.Users.AnyAsync(u => u.NormalizedPhoneNumber == normalized);
+
+        if (exists)
+        {
+            logger.LogInformation("[Identity] Admin user artıq mövcuddur, seed keçilir.");
+            return;
+        }
+
+        var admin = User.CreateAdmin(
+            phone,
+            hasher.Hash(password),
+            firstName ?? "Admin",
+            lastName  ?? "User");
+
+        ctx.Users.Add(admin);
+        await ctx.SaveChangesAsync();
+
+        logger.LogInformation("[Identity] Admin user yaradıldı: {Phone}", phone);
     }
 }

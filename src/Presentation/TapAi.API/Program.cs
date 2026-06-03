@@ -102,6 +102,7 @@ var app = builder.Build();
 await app.Services.MigrateCatalogAsync();
 await app.Services.MigrateMediaAsync();
 await app.Services.MigrateIdentityAsync();
+await app.Services.SeedIdentityAsync();
 
 // ── Logical replication subscription ─────────────────────────────────────────
 await SetupReplicationAsync(app.Configuration, app.Logger);

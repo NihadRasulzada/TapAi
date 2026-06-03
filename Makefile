@@ -1,5 +1,5 @@
-SLN := Turbo.slnx
-API := src/Presentation/Turbo.API/Turbo.API.csproj
+SLN := TapAi.slnx
+API := src/Presentation/TapAi.API/TapAi.API.csproj
 
 # ── Build ─────────────────────────────────────────────────────
 .PHONY: build
@@ -54,17 +54,17 @@ MODULE ?= Catalog
 MODULE_UPPER := $(shell echo $(MODULE) | tr '[:lower:]' '[:upper:]')
 
 # Persistence layihə yolları
-MIGRATIONS_PROJECT_IDENTITY := src/Modules/Identity/Infrastructure/Turbo.Module.Identity.Persistence/Turbo.Module.Identity.Persistence.csproj
-MIGRATIONS_PROJECT_CATALOG  := src/Modules/Catalog/Infrastructure/Turbo.Module.Catalog.Persistence/Turbo.Module.Catalog.Persistence.csproj
-MIGRATIONS_PROJECT_MEDIA    := src/Modules/Media/Infrastructure/Turbo.Module.Media.Persistence/Turbo.Module.Media.Persistence.csproj
+MIGRATIONS_PROJECT_IDENTITY := src/Modules/Identity/Infrastructure/TapAi.Module.Identity.Persistence/TapAi.Module.Identity.Persistence.csproj
+MIGRATIONS_PROJECT_CATALOG  := src/Modules/Catalog/Infrastructure/TapAi.Module.Catalog.Persistence/TapAi.Module.Catalog.Persistence.csproj
+MIGRATIONS_PROJECT_MEDIA    := src/Modules/Media/Infrastructure/TapAi.Module.Media.Persistence/TapAi.Module.Media.Persistence.csproj
 
 # Fully qualified context adları (eyni adlı context-lərin qarışmaması üçün)
-COMMAND_CONTEXT_IDENTITY := Turbo.Module.Identity.Persistence.Contexts.CommandDbContext
-QUERY_CONTEXT_IDENTITY   := Turbo.Module.Identity.Persistence.Contexts.QueryDbContext
-COMMAND_CONTEXT_CATALOG  := Turbo.Module.Catalog.Persistence.Contexts.CommandDbContext
-QUERY_CONTEXT_CATALOG    := Turbo.Module.Catalog.Persistence.Contexts.QueryDbContext
-COMMAND_CONTEXT_MEDIA    := Turbo.Module.Media.Persistence.Contexts.CommandDbContext
-QUERY_CONTEXT_MEDIA      := Turbo.Module.Media.Persistence.Contexts.QueryDbContext
+COMMAND_CONTEXT_IDENTITY := TapAi.Module.Identity.Persistence.Contexts.CommandDbContext
+QUERY_CONTEXT_IDENTITY   := TapAi.Module.Identity.Persistence.Contexts.QueryDbContext
+COMMAND_CONTEXT_CATALOG  := TapAi.Module.Catalog.Persistence.Contexts.CommandDbContext
+QUERY_CONTEXT_CATALOG    := TapAi.Module.Catalog.Persistence.Contexts.QueryDbContext
+COMMAND_CONTEXT_MEDIA    := TapAi.Module.Media.Persistence.Contexts.CommandDbContext
+QUERY_CONTEXT_MEDIA      := TapAi.Module.Media.Persistence.Contexts.QueryDbContext
 
 MIGRATIONS_PROJECT := $(MIGRATIONS_PROJECT_$(MODULE_UPPER))
 COMMAND_CONTEXT    := $(COMMAND_CONTEXT_$(MODULE_UPPER))
@@ -177,11 +177,11 @@ prod-logs:
 # ── Redis ─────────────────────────────────────────────────────
 .PHONY: redis-cli
 redis-cli:
-	docker exec -it turbo-redis redis-cli -a $$(grep REDIS_PASSWORD infra/env/.env | cut -d= -f2)
+	docker exec -it tapai-redis redis-cli -a $$(grep REDIS_PASSWORD infra/env/.env | cut -d= -f2)
 
 .PHONY: redis-flush
 redis-flush:
-	docker exec -it turbo-redis redis-cli -a $$(grep REDIS_PASSWORD infra/env/.env | cut -d= -f2) FLUSHALL
+	docker exec -it tapai-redis redis-cli -a $$(grep REDIS_PASSWORD infra/env/.env | cut -d= -f2) FLUSHALL
 
 # ── RabbitMQ ──────────────────────────────────────────────────
 .PHONY: rabbit-ui

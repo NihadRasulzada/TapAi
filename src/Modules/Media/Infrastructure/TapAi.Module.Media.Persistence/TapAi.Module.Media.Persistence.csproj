@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../Core/TapAi.Module.Media.Application/TapAi.Module.Media.Application.csproj" />
+    <ProjectReference Include="../../../../BuildingBlocks/TapAi.Shared.Application/TapAi.Shared.Application.csproj" />
+    <ProjectReference Include="../../../../BuildingBlocks/TapAi.Shared.Contracts/TapAi.Shared.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

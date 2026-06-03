@@ -1,5 +1,5 @@
 # =====================================================
-# Turbo - Docker Compose (Development)
+# TapAi - Docker Compose (Development)
 # Qaldırır: command-db, query-db, replication-setup, redis, rabbitmq, minio
 # API yerli (lokal) işləyir → servislərə localhost üzərindən qoşulur
 #
@@ -15,19 +15,19 @@
 #   api-net        → (API lokal işləyir, gələcək containerləşmə üçün ayrılıb)
 # =====================================================
 
-name: turbo-dev
+name: tapai-dev
 
 services:
 
   # ── Command DB (Write / Publisher) ──────────────────
   command-db:
     image: postgres:16-alpine
-    container_name: turbo-command-db
+    container_name: tapai-command-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${COMMAND_DB_NAME:-turbo_command}
-      POSTGRES_USER: ${COMMAND_DB_USER:-turbo}
-      POSTGRES_PASSWORD: ${COMMAND_DB_PASSWORD:-turbo_password}
+      POSTGRES_DB: ${COMMAND_DB_NAME:-tapai_command}
+      POSTGRES_USER: ${COMMAND_DB_USER:-tapai}
+      POSTGRES_PASSWORD: ${COMMAND_DB_PASSWORD:-tapai_password}
       REPLICATOR_PASSWORD: ${REPLICATOR_PASSWORD:-replicator_password}
     command:
       - postgres
@@ -43,7 +43,7 @@ services:
     ports:
       - "${COMMAND_DB_PORT:-5433}:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${COMMAND_DB_USER:-turbo} -d ${COMMAND_DB_NAME:-turbo_command}"]
+      test: ["CMD-SHELL", "pg_isready -U ${COMMAND_DB_USER:-tapai} -d ${COMMAND_DB_NAME:-tapai_command}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -53,20 +53,20 @@ services:
   # ── Query DB (Read / Subscriber) ────────────────────
   query-db:
     image: postgres:16-alpine
-    container_name: turbo-query-db
+    container_name: tapai-query-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${QUERY_DB_NAME:-turbo_query}
-      POSTGRES_USER: ${QUERY_DB_USER:-turbo}
-      POSTGRES_PASSWORD: ${QUERY_DB_PASSWORD:-turbo_password}
-      QUERY_READER_PASSWORD: ${QUERY_READER_PASSWORD:-turbo_reader_password}
+      POSTGRES_DB: ${QUERY_DB_NAME:-tapai_query}
+      POSTGRES_USER: ${QUERY_DB_USER:-tapai}
+      POSTGRES_PASSWORD: ${QUERY_DB_PASSWORD:-tapai_password}
+      QUERY_READER_PASSWORD: ${QUERY_READER_PASSWORD:-tapai_reader_password}
     volumes:
       - query_db_data:/var/lib/postgresql/data
       - ./docker/postgres/init/query-db/01-init-reader.sh:/docker-entrypoint-initdb.d/01-init-reader.sh:ro
     ports:
       - "${QUERY_DB_PORT:-5434}:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${QUERY_DB_USER:-turbo} -d ${QUERY_DB_NAME:-turbo_query}"]
+      test: ["CMD-SHELL", "pg_isready -U ${QUERY_DB_USER:-tapai} -d ${QUERY_DB_NAME:-tapai_query}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -78,17 +78,17 @@ services:
   # Hər iki DB-yə çatmalıdır → hər iki networkda olur
   replication-setup:
     image: postgres:16-alpine
-    container_name: turbo-replication-setup
+    container_name: tapai-replication-setup
     restart: on-failure
     environment:
       COMMAND_DB_HOST: command-db
       COMMAND_DB_PORT: 5432
       QUERY_DB_HOST: query-db
       QUERY_DB_PORT: 5432
-      POSTGRES_USER: ${COMMAND_DB_USER:-turbo}
-      POSTGRES_PASSWORD: ${COMMAND_DB_PASSWORD:-turbo_password}
-      COMMAND_DB_NAME: ${COMMAND_DB_NAME:-turbo_command}
-      QUERY_DB_NAME: ${QUERY_DB_NAME:-turbo_query}
+      POSTGRES_USER: ${COMMAND_DB_USER:-tapai}
+      POSTGRES_PASSWORD: ${COMMAND_DB_PASSWORD:-tapai_password}
+      COMMAND_DB_NAME: ${COMMAND_DB_NAME:-tapai_command}
+      QUERY_DB_NAME: ${QUERY_DB_NAME:-tapai_query}
       REPLICATOR_PASSWORD: ${REPLICATOR_PASSWORD:-replicator_password}
     volumes:
       - ./docker/postgres/init/02-setup-replication.sh:/setup-replication.sh:ro
@@ -105,11 +105,11 @@ services:
   # ── Redis ────────────────────────────────────────────
   redis:
     image: redis:7-alpine
-    container_name: turbo-redis
+    container_name: tapai-redis
     restart: unless-stopped
     command: >
       redis-server
-      --requirepass ${REDIS_PASSWORD:-turbo_redis_password}
+      --requirepass ${REDIS_PASSWORD:-tapai_redis_password}
       --maxmemory ${REDIS_MAX_MEMORY:-256mb}
       --maxmemory-policy allkeys-lru
     volumes:
@@ -117,7 +117,7 @@ services:
     ports:
       - "${REDIS_PORT:-6379}:6379"
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-turbo_redis_password}", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-tapai_redis_password}", "ping"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -127,12 +127,12 @@ services:
   # ── RabbitMQ ─────────────────────────────────────────
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: turbo-rabbitmq
+    container_name: tapai-rabbitmq
     restart: unless-stopped
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-turbo}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-turbo_rabbit_password}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-turbo}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-tapai}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-tapai_rabbit_password}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-tapai}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     ports:
@@ -149,11 +149,11 @@ services:
   # ── MinIO ─────────────────────────────────────────────
   minio:
     image: minio/minio:latest
-    container_name: turbo-minio
+    container_name: tapai-minio
     restart: unless-stopped
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-turbo}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-turbo_minio_password}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-tapai}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-tapai_minio_password}
     command: server /data --console-address ":9001"
     volumes:
       - minio_data:/data
@@ -183,19 +183,19 @@ volumes:
 networks:
   api-net:
     driver: bridge
-    name: turbo-dev-api-net
+    name: tapai-dev-api-net
   command-db-net:
     driver: bridge
-    name: turbo-dev-command-db-net
+    name: tapai-dev-command-db-net
   query-db-net:
     driver: bridge
-    name: turbo-dev-query-db-net
+    name: tapai-dev-query-db-net
   cache-net:
     driver: bridge
-    name: turbo-dev-cache-net
+    name: tapai-dev-cache-net
   messaging-net:
     driver: bridge
-    name: turbo-dev-messaging-net
+    name: tapai-dev-messaging-net
   storage-net:
     driver: bridge
-    name: turbo-dev-storage-net
+    name: tapai-dev-storage-net

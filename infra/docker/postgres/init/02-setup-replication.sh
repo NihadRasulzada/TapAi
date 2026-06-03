@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================================
-# Turbo - Logical Replication Wiring Script
+# TapAi - Logical Replication Wiring Script
 # Runs AFTER both command-db and query-db are healthy.
 # Called by the replication-setup service in compose.
 #
@@ -13,9 +13,9 @@ set -e
 
 COMMAND_HOST="${COMMAND_DB_HOST:-command-db}"
 COMMAND_PORT="${COMMAND_DB_PORT:-5432}"
-DB_USER="${POSTGRES_USER:-turbo}"
-DB_PASS="${POSTGRES_PASSWORD:-turbo_password}"
-COMMAND_DB="${COMMAND_DB_NAME:-turbo_command}"
+DB_USER="${POSTGRES_USER:-tapai}"
+DB_PASS="${POSTGRES_PASSWORD:-tapai_password}"
+COMMAND_DB="${COMMAND_DB_NAME:-tapai_command}"
 
 export PGPASSWORD="$DB_PASS"
 
@@ -33,9 +33,9 @@ psql -h "$COMMAND_HOST" -p "$COMMAND_PORT" -U "$DB_USER" -d "$COMMAND_DB" \
 DO \$\$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_publication WHERE pubname = 'turbo_publication'
+    SELECT 1 FROM pg_publication WHERE pubname = 'tapai_publication'
   ) THEN
-    CREATE PUBLICATION turbo_publication FOR ALL TABLES;
+    CREATE PUBLICATION tapai_publication FOR ALL TABLES;
     RAISE NOTICE 'Publication created.';
   ELSE
     RAISE NOTICE 'Publication already exists, skipping.';

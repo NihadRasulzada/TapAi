@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================================
-# Turbo - Command DB Init Script
+# TapAi - Command DB Init Script
 # Docker initdb zamanı işləyir, environment dəyərləri
 # avtomatik mövcuddur ($POSTGRES_* və custom env-lər)
 # =====================================================
@@ -13,8 +13,8 @@ set -e
 #   -d: psql username-i DB adı kimi istifadə edir; POSTGRES_USER != POSTGRES_DB
 #       olduqda "database does not exist" xətası verir.
 
-DB_USER="${POSTGRES_USER:-turbo}"
-DB_NAME="${POSTGRES_DB:-turbo_command}"
+DB_USER="${POSTGRES_USER:-tapai}"
+DB_NAME="${POSTGRES_DB:-tapai_command}"
 REPLICATOR_PASS="${REPLICATOR_PASSWORD:-replicator_password}"
 
 echo "🔧 Replicator rolu yaradılır (user: $DB_USER, db: $DB_NAME)..."

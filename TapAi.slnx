@@ -1,0 +1,102 @@
+<Solution>
+  <Folder Name="/src/">
+    <Folder Name="/src/BuildingBlocks/" />
+    <Folder Name="/src/Modules/" />
+    <Folder Name="/src/Presentation/" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/TapAi.Shared.Application/TapAi.Shared.Application.csproj" />
+    <Project Path="src/BuildingBlocks/TapAi.Shared.Contracts/TapAi.Shared.Contracts.csproj" />
+    <Project Path="src/BuildingBlocks/TapAi.Shared.Domain/TapAi.Shared.Domain.csproj" />
+    <Project Path="src/BuildingBlocks/TapAi.Shared.Infrastructure/TapAi.Shared.Infrastructure.csproj" />
+    <Project Path="src/BuildingBlocks/TapAi.Shared.Web/TapAi.Shared.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Catalog/" />
+  <Folder Name="/src/Modules/Catalog/Core/">
+    <Project Path="src/Modules/Catalog/Core/TapAi.Module.Catalog.Application/TapAi.Module.Catalog.Application.csproj" />
+    <Project Path="src/Modules/Catalog/Core/TapAi.Module.Catalog.Domain/TapAi.Module.Catalog.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Catalog/Infrastructure/">
+    <Project Path="src/Modules/Catalog/Infrastructure/TapAi.Module.Catalog.Infrastructure/TapAi.Module.Catalog.Infrastructure.csproj" />
+    <Project Path="src/Modules/Catalog/Infrastructure/TapAi.Module.Catalog.Persistence/TapAi.Module.Catalog.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Catalog/Presentation/">
+    <Project Path="src/Modules/Catalog/Presentation/TapAi.Module.Catalog.DependencyInjection/TapAi.Module.Catalog.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Comparison/" />
+  <Folder Name="/src/Modules/Comparison/Core/">
+    <Project Path="src/Modules/Comparison/Core/TapAi.Module.Comparison.Application/TapAi.Module.Comparison.Application.csproj" />
+    <Project Path="src/Modules/Comparison/Core/TapAi.Module.Comparison.Domain/TapAi.Module.Comparison.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Comparison/Infrastructure/">
+    <Project Path="src/Modules/Comparison/Infrastructure/TapAi.Module.Comparison.Infrastructure/TapAi.Module.Comparison.Infrastructure.csproj" />
+    <Project Path="src/Modules/Comparison/Infrastructure/TapAi.Module.Comparison.Persistence/TapAi.Module.Comparison.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Comparison/Presentation/">
+    <Project Path="src/Modules/Comparison/Presentation/TapAi.Module.Comparison.DependencyInjection/TapAi.Module.Comparison.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Identity/" />
+  <Folder Name="/src/Modules/Identity/Core/">
+    <Project Path="src/Modules/Identity/Core/TapAi.Module.Identity.Application/TapAi.Module.Identity.Application.csproj" />
+    <Project Path="src/Modules/Identity/Core/TapAi.Module.Identity.Domain/TapAi.Module.Identity.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Identity/Infrastructure/">
+    <Project Path="src/Modules/Identity/Infrastructure/TapAi.Module.Identity.Infrastructure/TapAi.Module.Identity.Infrastructure.csproj" />
+    <Project Path="src/Modules/Identity/Infrastructure/TapAi.Module.Identity.Persistence/TapAi.Module.Identity.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Identity/Presentation/">
+    <Project Path="src/Modules/Identity/Presentation/TapAi.Module.Identity.DependencyInjection/TapAi.Module.Identity.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Media/" />
+  <Folder Name="/src/Modules/Media/Core/">
+    <Project Path="src/Modules/Media/Core/TapAi.Module.Media.Application/TapAi.Module.Media.Application.csproj" />
+    <Project Path="src/Modules/Media/Core/TapAi.Module.Media.Domain/TapAi.Module.Media.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Media/Infrastructure/">
+    <Project Path="src/Modules/Media/Infrastructure/TapAi.Module.Media.Infrastructure/TapAi.Module.Media.Infrastructure.csproj" />
+    <Project Path="src/Modules/Media/Infrastructure/TapAi.Module.Media.Persistence/TapAi.Module.Media.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Media/Presentation/">
+    <Project Path="src/Modules/Media/Presentation/TapAi.Module.Media.DependencyInjection/TapAi.Module.Media.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Messaging/" />
+  <Folder Name="/src/Modules/Messaging/Core/">
+    <Project Path="src/Modules/Messaging/Core/TapAi.Module.Messaging.Application/TapAi.Module.Messaging.Application.csproj" />
+    <Project Path="src/Modules/Messaging/Core/TapAi.Module.Messaging.Domain/TapAi.Module.Messaging.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Messaging/Infrastructure/">
+    <Project Path="src/Modules/Messaging/Infrastructure/TapAi.Module.Messaging.Infrastructure/TapAi.Module.Messaging.Infrastructure.csproj" />
+    <Project Path="src/Modules/Messaging/Infrastructure/TapAi.Module.Messaging.Persistence/TapAi.Module.Messaging.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Messaging/Presentation/">
+    <Project Path="src/Modules/Messaging/Presentation/TapAi.Module.Messaging.DependencyInjection/TapAi.Module.Messaging.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notification/" />
+  <Folder Name="/src/Modules/Notification/Core/">
+    <Project Path="src/Modules/Notification/Core/TapAi.Module.Notification.Application/TapAi.Module.Notification.Application.csproj" />
+    <Project Path="src/Modules/Notification/Core/TapAi.Module.Notification.Domain/TapAi.Module.Notification.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notification/Infrastructure/">
+    <Project Path="src/Modules/Notification/Infrastructure/TapAi.Module.Notification.Infrastructure/TapAi.Module.Notification.Infrastructure.csproj" />
+    <Project Path="src/Modules/Notification/Infrastructure/TapAi.Module.Notification.Persistence/TapAi.Module.Notification.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notification/Presentation/">
+    <Project Path="src/Modules/Notification/Presentation/TapAi.Module.Notification.DependencyInjection/TapAi.Module.Notification.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/SavedItem/" />
+  <Folder Name="/src/Modules/SavedItem/Core/">
+    <Project Path="src/Modules/SavedItem/Core/TapAi.Module.SavedItem.Application/TapAi.Module.SavedItem.Application.csproj" />
+    <Project Path="src/Modules/SavedItem/Core/TapAi.Module.SavedItem.Domain/TapAi.Module.SavedItem.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/SavedItem/Infrastructure/">
+    <Project Path="src/Modules/SavedItem/Infrastructure/TapAi.Module.SavedItem.Infrastructure/TapAi.Module.SavedItem.Infrastructure.csproj" />
+    <Project Path="src/Modules/SavedItem/Infrastructure/TapAi.Module.SavedItem.Persistence/TapAi.Module.SavedItem.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/SavedItem/Presentation/">
+    <Project Path="src/Modules/SavedItem/Presentation/TapAi.Module.SavedItem.DependencyInjection/TapAi.Module.SavedItem.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="src/Presentation/TapAi.API/TapAi.API.csproj" />
+  </Folder>
+</Solution>

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TapAi.Module.Identity.Application.Common.Interfaces;
+using TapAi.Module.Identity.Application.Common.Settings;
 using TapAi.Module.Identity.Persistence.Contexts;
 using TapAi.Shared.Application.Abstraction;
 using AppConc = TapAi.Shared.Application.ResponseObject.Concreate;
@@ -11,49 +13,42 @@ public sealed class LoginHandler(
     IIdentityWriteDbContext writeDb,
     IIdentityReadDbContext readDb,
     IPasswordHasher passwordHasher,
-    IJwtService jwtService
+    IJwtService jwtService,
+    IOptions<BruteForceSettings> bruteForceOptions
 ) : ICommandHandler<LoginRequest, AppConc.Response<LoginResponse>>
 {
-    private const int MaxFailedAttempts = 5;
-    private const int BlockDurationSeconds = 900; // 15 dəqiqə
-
     public async Task<AppConc.Response<LoginResponse>> HandleAsync(
         LoginRequest command, CancellationToken ct = default)
     {
-        var normalizedEmail = command.Email.ToUpperInvariant();
+        var normalized = command.PhoneNumber.ToUpperInvariant();
 
         var user = await readDb.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, ct);
+            .FirstOrDefaultAsync(u => u.NormalizedPhoneNumber == normalized, ct);
 
-        if (user is null || !user.IsActive)
-            return AppConc.Response<LoginResponse>.Unauthorized("Email or password is incorrect.");
+        if (user is null)
+            return AppConc.Response<LoginResponse>.Unauthorized("Phone number or password is incorrect.");
 
         if (user.IsCurrentlyBlocked())
             return AppConc.Response<LoginResponse>.Forbidden("User is blocked. Please contact support.");
 
         if (!passwordHasher.Verify(command.Password, user.PasswordHash))
         {
-            // Uğursuz cəhdi yaz; hər halda yeni Attach-dan istifadə et
             writeDb.Attach(user);
             user.RecordFailedLogin();
-            if (user.FailedLoginCount >= MaxFailedAttempts)
-                user.Block(BlockDurationSeconds);
+            if (user.FailedLoginCount >= bruteForceOptions.Value.MaxFailedAttempts)
+                user.Block(bruteForceOptions.Value.BlockDurationSeconds);
             await writeDb.SaveChangesAsync(ct);
 
-            return AppConc.Response<LoginResponse>.Unauthorized("Email or password is incorrect.");
+            return AppConc.Response<LoginResponse>.Unauthorized("Phone number or password is incorrect.");
         }
 
-        // Uğurlu giriş: sayğacı sıfırla, bitmiş blok varsa bayrağı da təmizlə
         writeDb.Attach(user);
         user.OnSuccessfulLogin();
 
-        // Access token və onun bitim tarixi eyni anda hesablanır
         var accessToken = jwtService.GenerateAccessToken(user);
         var accessTokenExpiresAt = jwtService.GetAccessTokenExpiresAt();
 
-        // Raw token client-ə göndərilir; DB-də yalnız SHA-256 hash saxlanılır.
-        // Belə ki, DB sızması bütün aktiv sessiyaları ifşa etmir.
         var rawRefreshToken = jwtService.GenerateRefreshToken();
         var hashedToken     = jwtService.HashRefreshToken(rawRefreshToken);
         var refreshToken    = new RefreshTokenEntity(user.Id, hashedToken);

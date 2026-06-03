@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TapAi.Module.Identity.Persistence.Contexts;
@@ -11,9 +12,11 @@ using TapAi.Module.Identity.Persistence.Contexts;
 namespace TapAi.Module.Identity.Persistence.Migrations.Query
 {
     [DbContext(typeof(QueryDbContext))]
-    partial class QueryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260603103809_AddPhoneNumberToUser")]
+    partial class AddPhoneNumberToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,6 +64,10 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Query
                     b.Property<long?>("BlockedUntilSeconds")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.Property<int>("FailedLoginCount")
                         .HasColumnType("integer");
 
@@ -68,6 +75,9 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Query
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsBlocked")
                         .HasColumnType("boolean");
@@ -77,9 +87,18 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Query
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.Property<string>("NormalizedPhoneNumber")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -89,11 +108,23 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Query
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .IsUnique()
+                        .HasFilter("\"NormalizedEmail\" IS NOT NULL");
 
                     b.HasIndex("NormalizedPhoneNumber")
                         .IsUnique()
                         .HasFilter("\"NormalizedPhoneNumber\" IS NOT NULL");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

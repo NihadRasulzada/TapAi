@@ -54,6 +54,7 @@ public sealed class ImageResizeBackgroundService(
         var pending = await readDb.Medias
             .AsNoTracking()
             .Where(m => !m.IsResized)
+            .OrderBy(m => m.Id)
             .Take(_settings.BatchSize)
             .ToListAsync(ct);
 

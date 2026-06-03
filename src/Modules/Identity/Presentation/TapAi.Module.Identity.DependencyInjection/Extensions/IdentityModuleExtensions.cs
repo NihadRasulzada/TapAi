@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using TapAi.Module.Identity.Application.Common.Interfaces;
+using TapAi.Module.Identity.Application.Common.Settings;
 using TapAi.Module.Identity.Infrastructure.EmailWorker;
 using TapAi.Module.Identity.Infrastructure.Messaging;
 using TapAi.Module.Identity.Infrastructure.Options;
@@ -13,7 +15,8 @@ using TapAi.Module.Identity.Persistence.Features.Auth.Commands.BlockUser;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.ChangePassword;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.Login;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.RefreshToken;
-using TapAi.Module.Identity.Persistence.Features.Auth.Commands.Register;
+using TapAi.Module.Identity.Persistence.Features.Auth.Commands.RegisterStart;
+using TapAi.Module.Identity.Persistence.Features.Auth.Commands.RegisterVerify;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.UnblockUser;
 using TapAi.Shared.Application.Abstraction;
 using AppConc = TapAi.Shared.Application.ResponseObject.Concreate;
@@ -31,6 +34,17 @@ public static class IdentityModuleExtensions
             .Bind(configuration.GetSection(JwtOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
+
+        services.AddOptions<RegistrationJwtOptions>()
+            .Bind(configuration.GetSection(RegistrationJwtOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddOptions<OtpSettings>()
+            .Bind(configuration.GetSection(OtpSettings.SectionName));
+
+        services.AddOptions<BruteForceSettings>()
+            .Bind(configuration.GetSection(BruteForceSettings.SectionName));
 
         services.AddOptions<RabbitMqOptions>()
             .Bind(configuration.GetSection(RabbitMqOptions.SectionName))
@@ -53,16 +67,28 @@ public static class IdentityModuleExtensions
         services.AddScoped<IIdentityWriteDbContext>(sp => sp.GetRequiredService<CommandDbContext>());
         services.AddScoped<IIdentityReadDbContext>(sp => sp.GetRequiredService<QueryDbContext>());
 
+        // ── Redis ─────────────────────────────────────────────────────────────
+        var redisConnStr = configuration.GetConnectionString("Redis")
+            ?? throw new InvalidOperationException("ConnectionStrings:Redis tapılmadı.");
+        services.AddSingleton<IConnectionMultiplexer>(_ =>
+            ConnectionMultiplexer.Connect(redisConnStr));
+
         // ── Services ──────────────────────────────────────────────────────────
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
+        services.AddScoped<IRegistrationJwtService, RegistrationJwtService>();
+        services.AddSingleton<IOtpService, RedisOtpService>();
         services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
 
         // ── Handlers ──────────────────────────────────────────────────────────
         services.AddScoped<
-            ICommandHandler<RegisterUserRequest, AppConc.Response<RegisterUserResponse>>,
-            RegisterUserHandler>();
-        services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserValidator>();
+            ICommandHandler<RegisterStartRequest, AppConc.Response<RegisterStartResponse>>,
+            RegisterStartHandler>();
+        services.AddScoped<IValidator<RegisterStartRequest>, RegisterStartValidator>();
+
+        services.AddScoped<
+            ICommandHandler<RegisterVerifyRequest, AppConc.Response>,
+            RegisterVerifyHandler>();
 
         services.AddScoped<
             ICommandHandler<LoginRequest, AppConc.Response<LoginResponse>>,

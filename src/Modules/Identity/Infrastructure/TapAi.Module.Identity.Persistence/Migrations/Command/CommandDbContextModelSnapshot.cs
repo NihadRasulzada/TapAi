@@ -61,11 +61,6 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Command
                     b.Property<long?>("BlockedUntilSeconds")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
                     b.Property<int>("FailedLoginCount")
                         .HasColumnType("integer");
 
@@ -73,9 +68,6 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Command
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsBlocked")
                         .HasColumnType("boolean");
@@ -85,32 +77,23 @@ namespace TapAi.Module.Identity.Persistence.Migrations.Command
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("NormalizedEmail")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                    b.Property<string>("NormalizedPhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .IsUnique();
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique();
+                    b.HasIndex("NormalizedPhoneNumber")
+                        .IsUnique()
+                        .HasFilter("\"NormalizedPhoneNumber\" IS NOT NULL");
 
                     b.ToTable("Users");
                 });

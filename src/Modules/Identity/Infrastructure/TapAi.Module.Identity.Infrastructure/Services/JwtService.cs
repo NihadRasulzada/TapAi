@@ -21,11 +21,9 @@ public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService
 
         var claims = new[]
         {
-            // ClaimTypes.NameIdentifier istifadə edilir ki User.FindFirstValue(ClaimTypes.NameIdentifier)
-            // MapInboundClaims konfiqurasiyasından asılı olmayaraq həmişə işləsin.
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Sub,        user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email,      user.Email),
+            new Claim("phone",                            user.PhoneNumber ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.GivenName,  user.FirstName),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
             new Claim(JwtRegisteredClaimNames.Jti,        Guid.NewGuid().ToString()),

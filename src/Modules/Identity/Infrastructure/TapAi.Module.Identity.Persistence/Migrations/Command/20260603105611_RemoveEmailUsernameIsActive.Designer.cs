@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TapAi.Module.Identity.Persistence.Contexts;
 
 #nullable disable
 
-namespace TapAi.Module.Identity.Persistence.Migrations.Query
+namespace TapAi.Module.Identity.Persistence.Migrations.Command
 {
-    [DbContext(typeof(QueryDbContext))]
-    partial class QueryDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CommandDbContext))]
+    [Migration("20260603105611_RemoveEmailUsernameIsActive")]
+    partial class RemoveEmailUsernameIsActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

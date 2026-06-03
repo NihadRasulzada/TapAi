@@ -28,11 +28,6 @@ public sealed class RefreshTokenHandler(
             return AppConc.Response<RefreshTokenResponse>.Unauthorized(
                 "Refresh token is invalid or expired.");
 
-        // Bloklanmış və ya deaktiv user yeni token ala bilməz
-        if (!existing.User.IsActive)
-            return AppConc.Response<RefreshTokenResponse>.Unauthorized(
-                "Refresh token is invalid or expired.");
-
         if (existing.User.IsCurrentlyBlocked())
             return AppConc.Response<RefreshTokenResponse>.Forbidden(
                 "User is blocked. Please contact support.");

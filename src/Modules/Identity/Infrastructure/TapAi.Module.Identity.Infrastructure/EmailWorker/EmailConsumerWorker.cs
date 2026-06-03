@@ -105,28 +105,13 @@ public sealed class EmailConsumerWorker(
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 
-    private async Task SendWelcomeEmailAsync(UserRegisteredEvent evt, CancellationToken ct)
+    private Task SendWelcomeEmailAsync(UserRegisteredEvent evt, CancellationToken ct)
     {
-        var message = new MimeMessage();
-        message.From.Add(MailboxAddress.Parse(_email.From));
-        message.To.Add(MailboxAddress.Parse(evt.Email));
-        message.Subject = "Xoş gəldiniz!";
-        message.Body = new TextPart("html")
-        {
-            Text = $"""
-                <h2>Salam, {evt.FirstName}!</h2>
-                <p>Qeydiyyatınız uğurla tamamlandı.</p>
-                <p>Email: <strong>{evt.Email}</strong></p>
-                """
-        };
-
-        using var client = new SmtpClient();
-        await client.ConnectAsync(_email.SmtpHost, _email.SmtpPort, SecureSocketOptions.StartTls, ct);
-        await client.AuthenticateAsync(_email.Username, _email.Password, ct);
-        await client.SendAsync(message, ct);
-        await client.DisconnectAsync(true, ct);
-
-        logger.LogInformation("Xoş gəldin emaili göndərildi: {Email}", evt.Email);
+        // TODO: SMS module hazır olduqda burada xoş gəldin SMS-i göndəriləcək.
+        logger.LogInformation(
+            "İstifadəçi qeydiyyatdan keçdi: UserId={UserId}, Ad={FirstName} {LastName}",
+            evt.UserId, evt.FirstName, evt.LastName);
+        return Task.CompletedTask;
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)

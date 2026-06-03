@@ -11,25 +11,17 @@ public sealed class UserConfiguration : BaseEntityConfiguration<User>
     {
         base.Configure(builder);
 
-        builder.Property(u => u.Email)
-            .IsRequired()
-            .HasMaxLength(256);
+        builder.Property(u => u.PhoneNumber)
+            .IsRequired(false)
+            .HasMaxLength(20);
 
-        builder.Property(u => u.NormalizedEmail)
-            .IsRequired()
-            .HasMaxLength(256);
+        builder.Property(u => u.NormalizedPhoneNumber)
+            .IsRequired(false)
+            .HasMaxLength(20);
 
-        builder.HasIndex(u => u.NormalizedEmail).IsUnique();
-
-        builder.Property(u => u.UserName)
-            .IsRequired()
-            .HasMaxLength(256);
-
-        builder.Property(u => u.NormalizedUserName)
-            .IsRequired()
-            .HasMaxLength(256);
-
-        builder.HasIndex(u => u.NormalizedUserName).IsUnique();
+        builder.HasIndex(u => u.NormalizedPhoneNumber)
+            .IsUnique()
+            .HasFilter("\"NormalizedPhoneNumber\" IS NOT NULL");
 
         builder.Property(u => u.PasswordHash)
             .IsRequired();
@@ -42,7 +34,6 @@ public sealed class UserConfiguration : BaseEntityConfiguration<User>
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(u => u.IsActive).IsRequired();
         builder.Property(u => u.IsBlocked).IsRequired();
         builder.Property(u => u.FailedLoginCount).IsRequired();
 

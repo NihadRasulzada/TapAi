@@ -6,7 +6,8 @@ using TapAi.Module.Identity.Persistence.Features.Auth.Commands.BlockUser;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.ChangePassword;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.Login;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.RefreshToken;
-using TapAi.Module.Identity.Persistence.Features.Auth.Commands.Register;
+using TapAi.Module.Identity.Persistence.Features.Auth.Commands.RegisterStart;
+using TapAi.Module.Identity.Persistence.Features.Auth.Commands.RegisterVerify;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.UnblockUser;
 using TapAi.Shared.Application.Abstraction;
 using TapAi.Shared.Web.Controllers;
@@ -14,26 +15,39 @@ using AppConc = TapAi.Shared.Application.ResponseObject.Concreate;
 
 namespace TapAi.API.Controllers;
 
-/// <summary>
-/// İstifadəçi autentifikasiyası ilə bağlı əməliyyatları idarə edir.
-/// </summary>
 [ApiController]
 [Route("api/auth")]
 [Produces("application/json")]
 public sealed class AuthController(ICommandDispatcher commandDispatcher) : ControllerBase
 {
     /// <summary>
-    /// Yeni istifadəçi qeydiyyatı həyata keçirir.
+    /// Qeydiyyat prosesinin 1-ci addımı: ad, soyad, telefon, şifrə qəbul edir,
+    /// OTP göndərir və registration token qaytarır.
     /// </summary>
-    [HttpPost("register")]
-    [ProducesResponseType(typeof(CreatedResponse<RegisterUserResponse>), StatusCodes.Status201Created)]
+    [HttpPost("register/start")]
+    [ProducesResponseType(typeof(SuccessResponse<RegisterStartResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> Register(
-        [FromBody] RegisterUserRequest request, CancellationToken ct)
+    public async Task<IActionResult> RegisterStart(
+        [FromBody] RegisterStartRequest request, CancellationToken ct)
     {
         var result = await commandDispatcher
-            .DispatchAsync<RegisterUserRequest, AppConc.Response<RegisterUserResponse>>(request, ct);
+            .DispatchAsync<RegisterStartRequest, AppConc.Response<RegisterStartResponse>>(request, ct);
+        return this.HandleServiceResponse(result);
+    }
+
+    /// <summary>
+    /// Qeydiyyat prosesinin 2-ci addımı: OTP təsdiqləyir və istifadəçini yaradır.
+    /// </summary>
+    [HttpPost("register/verify")]
+    [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> RegisterVerify(
+        [FromBody] RegisterVerifyRequest request, CancellationToken ct)
+    {
+        var result = await commandDispatcher
+            .DispatchAsync<RegisterVerifyRequest, AppConc.Response>(request, ct);
         return this.HandleServiceResponse(result);
     }
 
@@ -127,12 +141,10 @@ public sealed class AuthController(ICommandDispatcher commandDispatcher) : Contr
     }
 }
 
-/// <summary>Şifrə dəyişmə sorğusunun HTTP body-si.</summary>
 public sealed record ChangePasswordHttpBody(
     string CurrentPassword,
     string NewPassword,
     string ConfirmPassword
 );
 
-/// <summary>İstifadəçi bloklama sorğusunun HTTP body-si.</summary>
 public sealed record BlockUserHttpBody(int DurationSeconds);

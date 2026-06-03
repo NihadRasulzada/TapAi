@@ -35,6 +35,15 @@ builder.Services.AddOpenApi(options =>
             Version = "v1",
             Description = "REST API for the TapAi car marketplace platform."
         };
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+        document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = "JWT access token"
+        };
         return Task.CompletedTask;
     });
 });
@@ -117,6 +126,10 @@ if (app.Environment.IsDevelopment())
     {
         options.Title = "TapAi API";
         options.Theme = ScalarTheme.Default;
+        options.Authentication = new ScalarAuthenticationOptions
+        {
+            PreferredSecurityScheme = "Bearer"
+        };
     });
     app.UseSwagger();
     app.UseSwaggerUI();

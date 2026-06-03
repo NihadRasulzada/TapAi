@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using TapAi.Module.Media.Application.Interfaces;
 using TapAi.Module.Media.Application.Settings;
 using TapAi.Module.Media.Persistence.Contexts;
-using MediaEntity = TapAi.Module.Media.Domain.Entity.Media;
 
 namespace TapAi.Module.Media.Persistence.BackgroundServices;
 
@@ -35,10 +34,7 @@ public sealed class ImageResizeBackgroundService(
                 logger.LogError(ex, "Unexpected error in image resize background service");
             }
 
-            await Task.Delay(
-                TimeSpan.FromSeconds(_settings.PollingIntervalSeconds),
-                stoppingToken
-            );
+            await Task.Delay(TimeSpan.FromSeconds(_settings.PollingIntervalSeconds), stoppingToken);
         }
     }
 
@@ -51,8 +47,8 @@ public sealed class ImageResizeBackgroundService(
         var resizeService = scope.ServiceProvider.GetRequiredService<IImageResizeService>();
 
         // Load untracked from read DB; attach to write DB before mutating.
-        var pending = await readDb.Medias
-            .AsNoTracking()
+        var pending = await readDb
+            .Medias.AsNoTracking()
             .Where(m => !m.IsResized)
             .OrderBy(m => m.Id)
             .Take(_settings.BatchSize)
@@ -60,8 +56,6 @@ public sealed class ImageResizeBackgroundService(
 
         if (pending.Count == 0)
             return;
-
-        logger.LogInformation("Resizing {Count} pending media item(s)", pending.Count);
 
         writeDb.AttachRange(pending);
 
@@ -77,7 +71,7 @@ public sealed class ImageResizeBackgroundService(
                     "png" => "image/png",
                     "gif" => "image/gif",
                     "webp" => "image/webp",
-                    _ => "image/jpeg"
+                    _ => "image/jpeg",
                 };
 
                 var (resized, contentType) = await resizeService.ResizeAsync(
@@ -95,8 +89,12 @@ public sealed class ImageResizeBackgroundService(
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Failed to resize media {MediaId} (ObjectKey: {ObjectKey})",
-                    media.Id, media.ObjectKey);
+                logger.LogError(
+                    ex,
+                    "Failed to resize media {MediaId} (ObjectKey: {ObjectKey})",
+                    media.Id,
+                    media.ObjectKey
+                );
             }
         }
 

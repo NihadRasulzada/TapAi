@@ -158,9 +158,11 @@ public static class IdentityModuleExtensions
     /// </summary>
     public static async Task SeedIdentityAsync(this IServiceProvider services)
     {
-        var config  = services.GetRequiredService<IConfiguration>();
-        var logger  = services.GetRequiredService<ILogger<CommandDbContext>>();
-        var hasher  = services.GetRequiredService<IPasswordHasher>();
+        using var scope = services.CreateScope();
+        var sp     = scope.ServiceProvider;
+        var config = sp.GetRequiredService<IConfiguration>();
+        var logger = sp.GetRequiredService<ILogger<CommandDbContext>>();
+        var hasher = sp.GetRequiredService<IPasswordHasher>();
 
         var phone     = config[$"{SeedAdminSettings.SectionName}:PhoneNumber"];
         var password  = config[$"{SeedAdminSettings.SectionName}:Password"];
@@ -175,6 +177,11 @@ public static class IdentityModuleExtensions
 
         var commandConnStr = config.GetConnectionString("CommandDb")
             ?? throw new InvalidOperationException("ConnectionStrings:CommandDb tapılmadı.");
+
+        // QueryDb (admin bağlantı) — replikasiya seed-dən əvvəl qurulduğuna zəmanət yoxdur,
+        // ona görə seed datası hər iki DB-yə birbaşa yazılır.
+        var queryConnStr = config.GetConnectionString("QueryDb")
+            ?? throw new InvalidOperationException("ConnectionStrings:QueryDb tapılmadı.");
 
         await using var ctx = new CommandDbContext(
             new DbContextOptionsBuilder<CommandDbContext>()
@@ -198,6 +205,21 @@ public static class IdentityModuleExtensions
 
         ctx.Users.Add(admin);
         await ctx.SaveChangesAsync();
+
+        // Eyni admin-i (eyni Id) query DB-yə də yaz.
+        // copy_data=false olan subscription seed-dən əvvəlki INSERT-ləri replikasiya etmir.
+        await using var queryCtx = new CommandDbContext(
+            new DbContextOptionsBuilder<CommandDbContext>()
+                .UseNpgsql(queryConnStr)
+                .Options);
+
+        var existsInQuery = await queryCtx.Users.AnyAsync(u => u.NormalizedPhoneNumber == normalized);
+        if (!existsInQuery)
+        {
+            queryCtx.Users.Add(admin);
+            await queryCtx.SaveChangesAsync();
+            logger.LogInformation("[Identity] Admin user query DB-yə də yazıldı: {Phone}", phone);
+        }
 
         logger.LogInformation("[Identity] Admin user yaradıldı: {Phone}", phone);
     }

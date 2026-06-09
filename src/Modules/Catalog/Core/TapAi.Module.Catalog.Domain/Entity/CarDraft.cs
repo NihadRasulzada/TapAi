@@ -1,11 +1,12 @@
 using TapAi.Module.Catalog.Domain.Enum;
+using TapAi.Module.Catalog.Domain.Exceptions;
 using TapAi.Shared.Domain.Models;
 
 namespace TapAi.Module.Catalog.Domain.Entity;
 
 public class CarDraft : BaseEntity
 {
-    public Guid? SellerId { get; private set; }
+    public Guid SellerId { get; private set; }
     public CarDraftStatus Status { get; private set; }
     public int CurrentStep { get; private set; }
     public DateTime CreatedAt { get; private set; }
@@ -24,13 +25,17 @@ public class CarDraft : BaseEntity
 
     // ── Factory ──────────────────────────────────────────────────────────────
     /// <summary>
-    /// Yeni draft yaradır. SellerId-nin token-dən gəlməsi təmin edilir.
+    /// Yeni draft yaradır. SellerId token-dən gəlir və boş ola bilməz.
     /// </summary>
-    public static CarDraft Create(Guid sellerId) =>
-        new(Guid.NewGuid(), (Guid?)sellerId);
+    public static CarDraft Create(Guid sellerId)
+    {
+        if (sellerId == Guid.Empty)
+            throw new DomainException("SellerId cannot be empty.");
+        return new CarDraft(Guid.NewGuid(), sellerId);
+    }
 
     // Two-arg constructor avoids signature clash with EF Core's single-Guid ctor.
-    private CarDraft(Guid id, Guid? sellerId) : base(id)
+    private CarDraft(Guid id, Guid sellerId) : base(id)
     {
         SellerId = sellerId;
         Status = CarDraftStatus.InProgress;
@@ -39,6 +44,9 @@ public class CarDraft : BaseEntity
     }
 
     protected CarDraft(Guid id) : base(id) { } // EF Core materialisation
+
+    /// <summary>Draft-ın verilmiş seller-ə aid olub-olmadığını yoxlayır.</summary>
+    public bool IsOwnedBy(Guid sellerId) => SellerId == sellerId;
 
     public void AdvanceStep() => CurrentStep++;
 

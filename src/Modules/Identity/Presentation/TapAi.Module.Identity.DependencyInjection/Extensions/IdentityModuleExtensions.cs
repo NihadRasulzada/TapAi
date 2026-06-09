@@ -12,6 +12,7 @@ using TapAi.Module.Identity.Infrastructure.Messaging;
 using TapAi.Module.Identity.Infrastructure.Options;
 using TapAi.Module.Identity.Infrastructure.Services;
 using TapAi.Module.Identity.Persistence.Contexts;
+using TapAi.Module.Identity.Persistence.Services;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.BlockUser;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.ChangePassword;
 using TapAi.Module.Identity.Persistence.Features.Auth.Commands.Login;
@@ -81,6 +82,9 @@ public static class IdentityModuleExtensions
         services.AddSingleton<IOtpService, RedisOtpService>();
         services.AddSingleton<ILoginRateLimitService, RedisLoginRateLimitService>();
         services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
+
+        // Modullararası istifadəçi statusu yoxlaması (Catalog onboarding üçün).
+        services.AddScoped<IUserAccessGuard, UserAccessGuard>();
 
         // ── Handlers ──────────────────────────────────────────────────────────
         services.AddScoped<

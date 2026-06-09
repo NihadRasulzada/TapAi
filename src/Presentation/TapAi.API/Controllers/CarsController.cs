@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TapAi.API.Controllers.Requests;
@@ -24,10 +23,10 @@ namespace TapAi.API.Controllers;
 [Authorize]
 public sealed class CarsController(
     ICommandDispatcher commandDispatcher,
-    IQueryDispatcher queryDispatcher) : ControllerBase
+    IQueryDispatcher queryDispatcher,
+    ICurrentUser currentUser) : ControllerBase
 {
-    private Guid CallerId =>
-        Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    private Guid CallerId => currentUser.Id;
 
     /// <summary>
     /// Returns the step definitions for the onboarding flow (public).

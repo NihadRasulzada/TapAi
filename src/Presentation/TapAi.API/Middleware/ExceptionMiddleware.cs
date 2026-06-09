@@ -2,6 +2,7 @@
 using System.Text.Json;
 using FluentValidation;
 using TapAi.Module.Identity.Domain.Exceptions;
+using TapAi.Shared.Application.Exceptions;
 
 namespace TapAi.API.Middleware;
 
@@ -20,6 +21,11 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
             {
                 errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
             });
+        }
+        catch (UnauthorizedException ex)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            await WriteJson(context, new { error = ex.Message });
         }
         catch (DomainException ex)
         {

@@ -13,7 +13,8 @@ namespace TapAi.Module.Catalog.Persistence.Features.Cars.Commands.SubmitDraftPri
 public sealed class SubmitDraftPricingHandler(
     ICatalogWriteDbContext writeDb,
     ICatalogReadDbContext readDb,
-    IPublishEndpoint publishEndpoint)
+    IPublishEndpoint publishEndpoint,
+    IUserAccessGuard userAccessGuard)
     : ICommandHandler<SubmitDraftPricingRequest, AppConc.Response<SubmitDraftPricingResponse>>
 {
     public async Task<AppConc.Response<SubmitDraftPricingResponse>> HandleAsync(
@@ -25,9 +26,12 @@ public sealed class SubmitDraftPricingHandler(
             .FirstOrDefaultAsync(d => d.Id == command.DraftId, ct);
         if (draft is null)
             return AppConc.Response<SubmitDraftPricingResponse>.NotFound("Draft not found.");
-        if (draft.SellerId != command.RequesterId)
+        if (!draft.IsOwnedBy(command.RequesterId))
             return AppConc.Response<SubmitDraftPricingResponse>.Forbidden(
                 "You do not have access to this draft.");
+        if (!await userAccessGuard.IsActiveAsync(command.RequesterId, ct))
+            return AppConc.Response<SubmitDraftPricingResponse>.Forbidden(
+                "Your account is not allowed to publish listings.");
         if (draft.Status == CarDraftStatus.Completed)
             return AppConc.Response<SubmitDraftPricingResponse>.BadRequest("Draft is already completed.");
         if (draft.CurrentStep != 3)
@@ -38,6 +42,7 @@ public sealed class SubmitDraftPricingHandler(
                 "Car details are incomplete. Resubmit the details step.");
 
         var car = new Car(
+            draft.SellerId,
             draft.BrandId.Value,
             draft.ModelId.Value,
             draft.Year.Value,
@@ -54,7 +59,7 @@ public sealed class SubmitDraftPricingHandler(
         await writeDb.SaveChangesAsync(ct);
 
         await publishEndpoint.Publish(
-            new CarListingPublishedIntegrationEvent(car.Id, command.DraftId), ct);
+            new CarListingPublishedIntegrationEvent(car.Id, command.DraftId, draft.SellerId), ct);
 
         return AppConc.Response<SubmitDraftPricingResponse>.Created(
             new SubmitDraftPricingResponse(command.DraftId, 3, 3, car.Id));

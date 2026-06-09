@@ -62,6 +62,9 @@ namespace TapAi.Module.Catalog.Persistence.Migrations.Command
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("TransmissionType")
                         .HasColumnType("integer");
 
@@ -103,7 +106,7 @@ namespace TapAi.Module.Catalog.Persistence.Migrations.Command
                     b.Property<int?>("Price")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("SellerId")
+                    b.Property<Guid>("SellerId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Status")

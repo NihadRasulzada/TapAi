@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Npgsql;
 using Scalar.AspNetCore;
+using TapAi.API.Identity;
 using TapAi.API.Middleware;
 using TapAi.Module.Catalog.DependencyInjection.Extensions;
 using TapAi.Module.Identity.DependencyInjection.Extensions;
@@ -23,6 +24,10 @@ builder.Services.Configure<HostOptions>(opts =>
     opts.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore);
 
 builder.Services.AddControllers();
+
+// ── Current user (HTTP konteksti üzərindən JWT claim-ləri) ─────────────────────
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 // ── OpenAPI / Scalar ──────────────────────────────────────────────────────────
 builder.Services.AddOpenApi(options =>

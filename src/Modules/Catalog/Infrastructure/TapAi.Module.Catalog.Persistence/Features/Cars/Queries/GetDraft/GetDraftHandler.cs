@@ -21,7 +21,7 @@ public sealed class GetDraftHandler(ICatalogReadDbContext db)
             return AppConc.Response<GetDraftResponse>.NotFound("Draft not found.");
 
         // Yalnız draftin sahibi öz draft-ını görə bilər.
-        if (draft.SellerId != query.RequesterId)
+        if (!draft.IsOwnedBy(query.RequesterId))
             return AppConc.Response<GetDraftResponse>.Forbidden(
                 "You do not have access to this draft.");
 

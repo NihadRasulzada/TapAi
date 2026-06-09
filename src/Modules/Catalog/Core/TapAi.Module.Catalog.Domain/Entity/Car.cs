@@ -6,6 +6,7 @@ namespace TapAi.Module.Catalog.Domain.Entity;
 
 public class Car : BaseEntity
 {
+    public Guid SellerId { get; private set; }
     public Guid BrandId { get; private set; }
     public Guid ModelId { get; private set; }
     public short Year { get; private set; }
@@ -16,6 +17,7 @@ public class Car : BaseEntity
     public string Description { get; private set; } = string.Empty;
 
     public Car(
+        Guid sellerId,
         Guid brandId,
         Guid modelId,
         short year,
@@ -26,6 +28,7 @@ public class Car : BaseEntity
         string description)
         : base(Guid.NewGuid())
     {
+        if (sellerId == Guid.Empty) throw new DomainException("SellerId cannot be empty.");
         if (brandId == Guid.Empty) throw new DomainException("BrandId cannot be empty.");
         if (modelId == Guid.Empty) throw new DomainException("ModelId cannot be empty.");
         if (year < 1886 || year > (short)DateTime.UtcNow.Year)
@@ -39,6 +42,7 @@ public class Car : BaseEntity
         if (string.IsNullOrWhiteSpace(description)) throw new DomainException("Description cannot be empty.");
         if (description.Length > 2000) throw new DomainException("Description must not exceed 2000 characters.");
 
+        SellerId = sellerId;
         BrandId = brandId;
         ModelId = modelId;
         Year = year;

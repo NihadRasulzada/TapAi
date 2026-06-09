@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TapAi.API.Extensions;
@@ -18,7 +17,9 @@ namespace TapAi.API.Controllers;
 [ApiController]
 [Route("api/auth")]
 [Produces("application/json")]
-public sealed class AuthController(ICommandDispatcher commandDispatcher) : ControllerBase
+public sealed class AuthController(
+    ICommandDispatcher commandDispatcher,
+    ICurrentUser currentUser) : ControllerBase
 {
     /// <summary>
     /// Qeydiyyat prosesinin 1-ci addımı: ad, soyad, telefon, şifrə qəbul edir,
@@ -93,9 +94,8 @@ public sealed class AuthController(ICommandDispatcher commandDispatcher) : Contr
     public async Task<IActionResult> ChangePassword(
         [FromBody] ChangePasswordHttpBody body, CancellationToken ct)
     {
-        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var command = new ChangePasswordRequest(
-            userId,
+            currentUser.Id,
             body.CurrentPassword,
             body.NewPassword,
             body.ConfirmPassword);

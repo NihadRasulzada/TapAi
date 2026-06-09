@@ -22,7 +22,7 @@ public sealed class SubmitDraftDetailsHandler(
             .FirstOrDefaultAsync(d => d.Id == command.DraftId, ct);
         if (draft is null)
             return AppConc.Response<SubmitDraftDetailsResponse>.NotFound("Draft not found.");
-        if (draft.SellerId != command.RequesterId)
+        if (!draft.IsOwnedBy(command.RequesterId))
             return AppConc.Response<SubmitDraftDetailsResponse>.Forbidden(
                 "You do not have access to this draft.");
         if (draft.Status == CarDraftStatus.Completed)

@@ -12,7 +12,7 @@ public sealed class CommandDbContext(DbContextOptions<CommandDbContext> options)
         builder.ApplyConfigurationsFromAssembly(typeof(CommandDbContext).Assembly);
     }
 
-    // ── IWriteDbContext explicit implementations ──────────────────────────────
+    // ── IWriteDbContext explicit implementasiyaları ───────────────────────────
     void IWriteDbContext.Attach<TEntity>(TEntity entity)
         => Attach(entity);
 

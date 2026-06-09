@@ -1,7 +1,7 @@
 namespace TapAi.Shared.Application.Context;
 
 /// <summary>
-/// Marker interface for read-only (query) database contexts.
-/// Implementations must not expose <c>SaveChanges</c> or <c>SaveChangesAsync</c>.
+/// Yalnız oxuma (query) verilənlər bazası kontekstləri üçün marker interfeysi.
+/// İmplementasiyalar <c>SaveChanges</c> və ya <c>SaveChangesAsync</c> təqdim etməməlidir.
 /// </summary>
 public interface IReadDbContext { }

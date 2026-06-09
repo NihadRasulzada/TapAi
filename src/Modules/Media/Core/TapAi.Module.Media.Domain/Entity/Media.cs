@@ -31,5 +31,5 @@ public class Media : BaseEntity
 
     public void SetResized() => IsResized = true;
 
-    protected Media() : base(Guid.NewGuid()) { } // EF Core
+    protected Media() : base(Guid.NewGuid()) { } // EF Core üçün
 }

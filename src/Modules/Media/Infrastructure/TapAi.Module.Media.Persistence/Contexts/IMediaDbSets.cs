@@ -3,9 +3,9 @@ using MediaEntity = TapAi.Module.Media.Domain.Entity.Media;
 namespace TapAi.Module.Media.Persistence.Contexts;
 
 /// <summary>
-/// Declares the entity sets exposed by the Media database.
-/// Consumed by <see cref="IMediaReadDbContext"/> (read side) and
-/// implemented explicitly on <see cref="MediaDbContext"/> via its EF <c>DbSet</c> property.
+/// Media verilənlər bazasının təqdim etdiyi entity set-lərini elan edir.
+/// <see cref="IMediaReadDbContext"/> (oxuma tərəfi) tərəfindən istifadə olunur və
+/// <see cref="MediaDbContext"/> üzərində EF <c>DbSet</c> property-si ilə explicit implement edilir.
 /// </summary>
 public interface IMediaDbSets
 {

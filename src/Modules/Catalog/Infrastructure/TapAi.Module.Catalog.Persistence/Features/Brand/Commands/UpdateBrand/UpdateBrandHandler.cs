@@ -15,16 +15,16 @@ public sealed class UpdateBrandHandler(
     public async Task<AppConc.Response<UpdateBrandResponse>> HandleAsync(
         UpdateBrandRequest command, CancellationToken ct = default)
     {
-        // Load untracked from read DB; attach to write DB before mutating
-        // so the change tracker captures only the delta.
+        // Oxuma DB-dən track olunmadan yüklə; dəyişdirmədən əvvəl yazma DB-yə attach et
+        // ki, change tracker yalnız fərqi (delta) tutsun.
         var brand = await readDb.Brands
             .AsNoTracking()
             .FirstOrDefaultAsync(b => b.Id == command.Id, ct);
         if (brand is null)
             return AppConc.Response<UpdateBrandResponse>.NotFound("Brand not found.");
 
-        writeDb.Attach(brand);          // Unchanged state — snapshot recorded
-        brand.UpdateName(command.Name); // EF detects the change
+        writeDb.Attach(brand);          // Unchanged vəziyyəti — snapshot qeydə alındı
+        brand.UpdateName(command.Name); // EF dəyişikliyi aşkarlayır
         await writeDb.SaveChangesAsync(ct);
 
         return AppConc.Response<UpdateBrandResponse>.Success(new UpdateBrandResponse(brand.Id, brand.Name));

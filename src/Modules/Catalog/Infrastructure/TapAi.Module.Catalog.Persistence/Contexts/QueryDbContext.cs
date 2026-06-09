@@ -6,7 +6,7 @@ public sealed class QueryDbContext(DbContextOptions<QueryDbContext> options)
     : CatalogDbContext(options), ICatalogReadDbContext
 {
     /// <summary>
-    /// Query DB is read-only — writes must go through <see cref="CommandDbContext"/>.
+    /// Query DB yalnız oxunaqlıdır — yazılar <see cref="CommandDbContext"/> üzərindən getməlidir.
     /// </summary>
     public override Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default) =>

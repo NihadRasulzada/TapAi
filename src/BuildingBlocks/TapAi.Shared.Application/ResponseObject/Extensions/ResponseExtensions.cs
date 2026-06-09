@@ -6,7 +6,7 @@ namespace TapAi.Shared.Application.ResponseObject.Extensions;
 public static class ResponseExtensions
 {
     /// <summary>
-    /// Executes an action if the response is successful
+    /// Cavab uğurludursa verilmiş əməliyyatı icra edir
     /// </summary>
     public static IResponse<T> OnSuccess<T>(this IResponse<T> response, Action<T> action)
     {
@@ -18,7 +18,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Executes an action if the response is failure
+    /// Cavab uğursuzdursa verilmiş əməliyyatı icra edir
     /// </summary>
     public static IResponse<T> OnFailure<T>(this IResponse<T> response, Action<IResponse<T>> action)
     {
@@ -30,7 +30,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Maps the data from one type to another
+    /// Datanı bir tipdən digərinə map edir
     /// </summary>
     public static Response<TResult> Map<T, TResult>(
         this IResponse<T> response,
@@ -46,7 +46,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Checks if response has validation errors
+    /// Cavabda validation xətalarının olub-olmadığını yoxlayır
     /// </summary>
     public static bool HasValidationErrors(this IResponse response)
     {
@@ -54,7 +54,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Checks if response has errors
+    /// Cavabda xətaların olub-olmadığını yoxlayır
     /// </summary>
     public static bool HasErrors(this IResponse response)
     {
@@ -62,7 +62,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Gets first validation error message if exists
+    /// Varsa, ilk validation xəta mesajını qaytarır
     /// </summary>
     public static string GetFirstValidationError(this IResponse response)
     {
@@ -70,7 +70,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Gets first error description if exists
+    /// Varsa, ilk xətanın təsvirini qaytarır
     /// </summary>
     public static string GetFirstError(this IResponse response)
     {
@@ -78,7 +78,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Combines two responses, keeping the failure if any
+    /// İki cavabı birləşdirir; varsa, uğursuz olanı saxlayır
     /// </summary>
     public static Response<T> Combine<T>(this IResponse<T> first, IResponse second)
     {
@@ -92,7 +92,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Executes a function and returns response
+    /// Funksiyanı icra edib cavab qaytarır
     /// </summary>
     public static Response<TResult> Bind<T, TResult>(
         this IResponse<T> response,
@@ -108,7 +108,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Gets metadata value by key
+    /// Açara görə metadata dəyərini qaytarır
     /// </summary>
     public static TValue GetMetadata<TValue>(this IResponse response, string key)
     {
@@ -121,7 +121,7 @@ public static class ResponseExtensions
     }
 
     /// <summary>
-    /// Checks if metadata contains key
+    /// Metadata-da açarın olub-olmadığını yoxlayır
     /// </summary>
     public static bool HasMetadata(this IResponse response, string key)
     {

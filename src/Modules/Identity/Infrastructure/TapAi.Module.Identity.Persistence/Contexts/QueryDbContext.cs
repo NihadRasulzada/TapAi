@@ -12,7 +12,7 @@ public sealed class QueryDbContext(DbContextOptions<QueryDbContext> options)
     }
 
     /// <summary>
-    /// QueryDbContext is read-only — writes must go through <see cref="CommandDbContext"/>.
+    /// QueryDbContext yalnız oxunaqlıdır — yazılar <see cref="CommandDbContext"/> üzərindən getməlidir.
     /// </summary>
     public override Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default) =>

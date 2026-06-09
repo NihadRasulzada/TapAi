@@ -46,7 +46,7 @@ public sealed class ImageResizeBackgroundService(
         var minioService = scope.ServiceProvider.GetRequiredService<IMinioService>();
         var resizeService = scope.ServiceProvider.GetRequiredService<IImageResizeService>();
 
-        // Load untracked from read DB; attach to write DB before mutating.
+        // Oxuma DB-dən track olunmadan yüklə; dəyişdirmədən əvvəl yazma DB-yə attach et.
         var pending = await readDb
             .Medias.AsNoTracking()
             .Where(m => !m.IsResized)

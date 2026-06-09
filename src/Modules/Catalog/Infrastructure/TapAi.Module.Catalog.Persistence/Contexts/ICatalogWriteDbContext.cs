@@ -3,10 +3,9 @@ using TapAi.Shared.Application.Context;
 namespace TapAi.Module.Catalog.Persistence.Contexts;
 
 /// <summary>
-/// Write context for the Catalog database.
-/// Exposes only the generic mutation helpers from <see cref="IWriteDbContext"/>
-/// — no entity-set properties — so command handlers are forced to
-/// inject <see cref="ICatalogReadDbContext"/> when they need to read
-/// a related entity before mutating.
+/// Catalog verilənlər bazası üçün yazma konteksti.
+/// Yalnız <see cref="IWriteDbContext"/>-dən gələn ümumi mutasiya köməkçilərini təqdim edir
+/// — entity-set property-ləri yoxdur — beləcə command handler-lər dəyişdirmədən əvvəl
+/// əlaqəli entity oxumaq lazım olduqda <see cref="ICatalogReadDbContext"/>-i inject etməyə məcbur olur.
 /// </summary>
 public interface ICatalogWriteDbContext : IWriteDbContext { }

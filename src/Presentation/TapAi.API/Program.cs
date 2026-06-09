@@ -38,7 +38,7 @@ builder.Services.AddOpenApi(options =>
         {
             Title = "TapAi API",
             Version = "v1",
-            Description = "REST API for the TapAi car marketplace platform."
+            Description = "TapAi avtomobil bazarı platforması üçün REST API."
         };
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
@@ -47,7 +47,7 @@ builder.Services.AddOpenApi(options =>
             Type = SecuritySchemeType.Http,
             Scheme = "bearer",
             BearerFormat = "JWT",
-            Description = "JWT access token"
+            Description = "JWT giriş tokeni"
         };
         return Task.CompletedTask;
     });
@@ -55,7 +55,7 @@ builder.Services.AddOpenApi(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ── Authentication / JWT ──────────────────────────────────────────────────────
+// ── Autentifikasiya / JWT ─────────────────────────────────────────────────────
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opts =>
     {
@@ -73,17 +73,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
-// ── Options ──────────────────────────────────────────────────────────────────
+// ── Seçimlər (Options) ─────────────────────────────────────────────────────────
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMq"));
 
-// ── Dispatchers ───────────────────────────────────────────────────────────────
+// ── Dispatcher-lər ────────────────────────────────────────────────────────────
 builder.Services.AddScoped<ICommandDispatcher, CommandDispatcher>();
 builder.Services.AddScoped<IQueryDispatcher, QueryDispatcher>();
 
-// ── Pipeline behaviors ────────────────────────────────────────────────────────
+// ── Pipeline davranışları ─────────────────────────────────────────────────────
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 
-// ── Modules ───────────────────────────────────────────────────────────────────
+// ── Modullar ──────────────────────────────────────────────────────────────────
 builder.Services.AddCatalogModule(builder.Configuration);
 builder.Services.AddMediaModule(builder.Configuration);
 builder.Services.AddIdentityModule(builder.Configuration);
@@ -110,7 +110,7 @@ builder.Services.AddMassTransit(x =>
 // ─────────────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-// ── Database migrations ───────────────────────────────────────────────────────
+// ── Verilənlər bazası migration-ları ──────────────────────────────────────────
 // Əvvəlcə hər iki DB-yə migration tətbiq et, SONRA replication qur.
 // Bu sıra vacibdir: subscription yarananda cədvəllər hər iki tərəfdə artıq mövcud olur.
 await app.Services.MigrateCatalogAsync();
@@ -118,10 +118,10 @@ await app.Services.MigrateMediaAsync();
 await app.Services.MigrateIdentityAsync();
 await app.Services.SeedIdentityAsync();
 
-// ── Logical replication subscription ─────────────────────────────────────────
+// ── Logical replication subscription-u ───────────────────────────────────────
 await SetupReplicationAsync(app.Configuration, app.Logger);
 
-// ── Middleware ────────────────────────────────────────────────────────────────
+// ── Ara qat (middleware) ──────────────────────────────────────────────────────
 app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -147,7 +147,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
-// ── Replication setup ─────────────────────────────────────────────────────────
+// ── Replication qurulması ─────────────────────────────────────────────────────
 // Migration-lardan SONRA çağırılır ki, subscription yarananda hər iki DB-də
 // cədvəllər mövcud olsun. Beləliklə worker heç conflict görməz.
 //

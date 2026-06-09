@@ -11,7 +11,7 @@ public class Brand : BaseEntity
         Name = name;
     }
 
-    protected Brand() : base(Guid.NewGuid()) { } // EF Core
+    protected Brand() : base(Guid.NewGuid()) { } // EF Core üçün
 
     public void UpdateName(string name) => Name = name;
 }

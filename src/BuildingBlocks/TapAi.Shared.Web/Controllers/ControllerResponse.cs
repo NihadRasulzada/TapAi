@@ -3,27 +3,27 @@ using TapAi.Shared.Application.ResponseObject;
 namespace TapAi.Shared.Web.Controllers;
 
 /// <summary>
-/// Standard success response without data
+/// Data daşımayan standart uğur cavabı
 /// </summary>
 public class SuccessResponse(string message)
 {
     /// <summary>
-    /// Indicates if the operation was successful
+    /// Əməliyyatın uğurlu olub-olmadığını göstərir
     /// </summary>
     /// <example>true</example>
     public bool Success { get; set; } = true;
 
     /// <summary>
-    /// Success message describing the operation result
+    /// Əməliyyatın nəticəsini təsvir edən uğur mesajı
     /// </summary>
-    /// <example>Entity created successfully</example>
+    /// <example>Entity uğurla yaradıldı</example>
     public string Message { get; set; } = message;
 }
 
 public class SuccessResponse<T>(T data, string message)
 {
     /// <summary>
-    /// Indicates if the operation was successful
+    /// Əməliyyatın uğurlu olub-olmadığını göstərir
     /// </summary>
     /// <example>true</example>
     public bool Success { get; set; } = true;
@@ -31,99 +31,99 @@ public class SuccessResponse<T>(T data, string message)
     public T Data { get; set; } = data;
 
     /// <summary>
-    /// Success message describing the operation result
+    /// Əməliyyatın nəticəsini təsvir edən uğur mesajı
     /// </summary>
-    /// <example>Entity created successfully</example>
+    /// <example>Entity uğurla yaradıldı</example>
     public string Message { get; set; } = message;
 }
 
 public class CreatedResponse<T>(T data, string message) : SuccessResponse<T>(data, message) { }
 
 /// <summary>
-/// Error response for client errors (400, 404)
+/// Klient xətaları üçün xəta cavabı (400, 404)
 /// </summary>
 public class ErrorResponse(string message)
 {
     /// <summary>
-    /// Indicates if the operation was successful
+    /// Əməliyyatın uğurlu olub-olmadığını göstərir
     /// </summary>
     /// <example>false</example>
     public bool Success { get; set; } = false;
 
     /// <summary>
-    /// Error message describing what went wrong
+    /// Nəyin səhv getdiyini təsvir edən xəta mesajı
     /// </summary>
-    /// <example>Entity with ID 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found</example>
+    /// <example>3fa85f64-5717-4562-b3fc-2c963f66afa6 ID-li entity tapılmadı</example>
     public string Message { get; set; } = message;
 }
 
 /// <summary>
-/// Validation error response (422)
+/// Validation xətası cavabı (422)
 /// </summary>
 public class ValidationErrorResponse(string message, Dictionary<string, string[]> errors)
 {
     /// <summary>
-    /// Indicates if the operation was successful
+    /// Əməliyyatın uğurlu olub-olmadığını göstərir
     /// </summary>
     /// <example>false</example>
     public bool Success { get; set; } = false;
 
     /// <summary>
-    /// Error message
+    /// Xəta mesajı
     /// </summary>
-    /// <example>Validation failed</example>
+    /// <example>Validation uğursuz oldu</example>
     public string Message { get; set; } = message;
 
     /// <summary>
-    /// Validation errors grouped by property name
+    /// Property adına görə qruplaşdırılmış validation xətaları
     /// </summary>
-    /// <example>{"name":["Name is required","Name must be unique"],"description":["Description must not exceed 500 characters"]}</example>
+    /// <example>{"name":["Ad tələb olunur","Ad unikal olmalıdır"],"description":["Təsvir 500 simvoldan çox olmamalıdır"]}</example>
     public Dictionary<string, string[]> Errors { get; set; } = errors;
 }
 
 /// <summary>
-/// Internal server error response (500)
+/// Daxili server xətası cavabı (500)
 /// </summary>
 public class ServerErrorResponse(string message, IEnumerable<CustomError> errors)
 {
     /// <summary>
-    /// Indicates if the operation was successful
+    /// Əməliyyatın uğurlu olub-olmadığını göstərir
     /// </summary>
     /// <example>false</example>
     public bool Success { get; set; } = false;
 
     /// <summary>
-    /// Error message
+    /// Xəta mesajı
     /// </summary>
-    /// <example>An internal server error occurred</example>
+    /// <example>Daxili server xətası baş verdi</example>
     public string Message { get; set; } = message;
 
     /// <summary>
-    /// Additional error details (optional)
+    /// Əlavə xəta detalları (opsional)
     /// </summary>
     public IEnumerable<CustomError>? Errors { get; set; } = errors;
 }
 
 /// <summary>
-/// Standard success response with data payload
+/// Data yükü ilə standart uğur cavabı
 /// </summary>
-/// <typeparam name="T">Type of the data returned</typeparam>
+/// <typeparam name="T">Qaytarılan datanın tipi</typeparam>
 public class PagedDataResponse<T>(T? data, string message, PaginationMetadata metadata)
 {
     /// <summary>
-    /// Indicates if the operation was successful
+    /// Əməliyyatın uğurlu olub-olmadığını göstərir
     /// </summary>
     /// <example>true</example>
     public bool Success { get; set; } = true;
 
     /// <summary>
-    /// Success message describing the operation result
+    /// Əməliyyatın nəticəsini təsvir edən uğur mesajı
     /// </summary>
-    /// <example>Operation completed successfully</example>
+    /// <example>Əməliyyat uğurla tamamlandı</example>
     public string Message { get; set; } = message;
 
     /// <summary>
-    /// The returned data payload
+    /// Qaytarılan data yükü
     /// </summary>
     public T? Data { get; set; } = data;
 

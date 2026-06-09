@@ -17,7 +17,7 @@ public sealed class CarListingPublishedConsumer(
         var message = context.Message;
         var ct = context.CancellationToken;
 
-        // Load untracked from read DB; attach to write DB so mutations are persisted.
+        // Oxuma DB-dən track olunmadan yüklə; mutasiyalar saxlanılsın deyə yazma DB-yə attach et.
         var draftMediaItems = await readDb.Medias
             .AsNoTracking()
             .Where(m => m.OwnerId == message.DraftId && m.OwnerType == MediaOwnerType.CarDraft)

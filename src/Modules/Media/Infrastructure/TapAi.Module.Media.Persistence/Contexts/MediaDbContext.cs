@@ -5,17 +5,17 @@ using MediaEntity = TapAi.Module.Media.Domain.Entity.Media;
 namespace TapAi.Module.Media.Persistence.Contexts;
 
 /// <summary>
-/// Base EF Core context shared by <see cref="CommandDbContext"/> (write)
-/// and <see cref="QueryDbContext"/> (read).
-/// Implements <see cref="IMediaDbSets"/> so that both concrete contexts
-/// satisfy the read interface without repeating property declarations.
-/// The explicit interface member exposes <c>DbSet&lt;Media&gt;</c> as
-/// <see cref="IQueryable{T}"/>, stripping EF mutation surface from the interface.
+/// <see cref="CommandDbContext"/> (yazma) və <see cref="QueryDbContext"/> (oxuma)
+/// tərəfindən paylaşılan baza EF Core konteksti.
+/// <see cref="IMediaDbSets"/>-i implement edir ki, hər iki konkret kontekst
+/// property elanlarını təkrarlamadan oxuma interfeysini ödəsin.
+/// Explicit interfeys üzvü <c>DbSet&lt;Media&gt;</c>-ni <see cref="IQueryable{T}"/> kimi
+/// təqdim edir və beləcə EF mutasiya səthini interfeysdən çıxarır.
 /// </summary>
 public abstract class MediaDbContext(DbContextOptions options) : AppDbContext(options), IMediaDbSets
 {
     public DbSet<MediaEntity> Medias { get; set; } = null!;
 
-    // ── IMediaDbSets explicit implementation ────────────────────────────
+    // ── IMediaDbSets explicit implementasiyası ──────────────────────────
     IQueryable<MediaEntity> IMediaDbSets.Medias => Medias;
 }

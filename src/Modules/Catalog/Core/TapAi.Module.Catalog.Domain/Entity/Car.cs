@@ -53,5 +53,5 @@ public class Car : BaseEntity
         Description = description;
     }
 
-    protected Car() : base(Guid.NewGuid()) { } // EF Core
+    protected Car() : base(Guid.NewGuid()) { } // EF Core üçün
 }

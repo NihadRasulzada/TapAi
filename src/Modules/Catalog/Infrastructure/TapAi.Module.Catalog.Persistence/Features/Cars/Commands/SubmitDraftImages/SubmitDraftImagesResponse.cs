@@ -1,6 +1,6 @@
 namespace TapAi.Module.Catalog.Persistence.Features.Cars.Commands.SubmitDraftImages;
 
-/// <summary>Returned after images are uploaded; guides the client to the details step.</summary>
+/// <summary>Şəkillər yükləndikdən sonra qaytarılır; klienti detallar addımına yönəldir.</summary>
 public sealed record SubmitDraftImagesResponse(
     Guid DraftId,
     int CompletedStep,

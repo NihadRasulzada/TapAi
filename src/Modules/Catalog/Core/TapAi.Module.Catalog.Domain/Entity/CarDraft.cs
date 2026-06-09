@@ -11,7 +11,7 @@ public class CarDraft : BaseEntity
     public int CurrentStep { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    // Step 2 — car details
+    // Addım 2 — avtomobil detalları
     public Guid? BrandId { get; private set; }
     public Guid? ModelId { get; private set; }
     public short? Year { get; private set; }
@@ -19,7 +19,7 @@ public class CarDraft : BaseEntity
     public TransmissionType? TransmissionType { get; private set; }
     public int? Mileage { get; private set; }
 
-    // Step 3 — pricing
+    // Addım 3 — qiymət
     public int? Price { get; private set; }
     public string? Description { get; private set; }
 
@@ -34,7 +34,7 @@ public class CarDraft : BaseEntity
         return new CarDraft(Guid.NewGuid(), sellerId);
     }
 
-    // Two-arg constructor avoids signature clash with EF Core's single-Guid ctor.
+    // İki arqumentli konstruktor EF Core-un tək-Guid ctor-u ilə imza toqquşmasının qarşısını alır.
     private CarDraft(Guid id, Guid sellerId) : base(id)
     {
         SellerId = sellerId;
@@ -43,7 +43,7 @@ public class CarDraft : BaseEntity
         CreatedAt = DateTime.UtcNow;
     }
 
-    protected CarDraft(Guid id) : base(id) { } // EF Core materialisation
+    protected CarDraft(Guid id) : base(id) { } // EF Core materializasiyası
 
     /// <summary>Draft-ın verilmiş seller-ə aid olub-olmadığını yoxlayır.</summary>
     public bool IsOwnedBy(Guid sellerId) => SellerId == sellerId;

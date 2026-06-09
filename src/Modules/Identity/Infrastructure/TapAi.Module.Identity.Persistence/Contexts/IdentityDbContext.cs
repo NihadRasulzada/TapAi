@@ -5,10 +5,10 @@ using TapAi.Shared.Application.Context;
 namespace TapAi.Module.Identity.Persistence.Contexts;
 
 /// <summary>
-/// Base EF Core context shared by <see cref="CommandDbContext"/> (write)
-/// and <see cref="QueryDbContext"/> (read).
-/// Implements <see cref="IIdentityDbSets"/> so that both concrete contexts
-/// satisfy the read interface without repeating property declarations.
+/// <see cref="CommandDbContext"/> (yazma) və <see cref="QueryDbContext"/> (oxuma)
+/// tərəfindən paylaşılan baza EF Core konteksti.
+/// <see cref="IIdentityDbSets"/>-i implement edir ki, hər iki konkret kontekst
+/// property elanlarını təkrarlamadan oxuma interfeysini ödəsin.
 /// </summary>
 public abstract class IdentityDbContext(DbContextOptions options)
     : AppDbContext(options), IIdentityDbSets
@@ -16,7 +16,7 @@ public abstract class IdentityDbContext(DbContextOptions options)
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
-    // ── IIdentityDbSets explicit implementations ─────────────────────────────
+    // ── IIdentityDbSets explicit implementasiyaları ──────────────────────────
     IQueryable<User> IIdentityDbSets.Users => Users;
     IQueryable<RefreshToken> IIdentityDbSets.RefreshTokens => RefreshTokens;
 }

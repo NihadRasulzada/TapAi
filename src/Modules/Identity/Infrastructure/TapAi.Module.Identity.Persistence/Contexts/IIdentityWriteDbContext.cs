@@ -3,9 +3,9 @@ using TapAi.Shared.Application.Context;
 namespace TapAi.Module.Identity.Persistence.Contexts;
 
 /// <summary>
-/// Write context for the Identity database.
-/// Exposes only the generic mutation helpers from <see cref="IWriteDbContext"/>.
-/// Command handlers must inject <see cref="IIdentityReadDbContext"/> when
-/// they need to read an entity before mutating it.
+/// Identity verilənlər bazası üçün yazma konteksti.
+/// Yalnız <see cref="IWriteDbContext"/>-dən gələn ümumi mutasiya köməkçilərini təqdim edir.
+/// Command handler-lər dəyişdirmədən əvvəl entity oxumaq lazım olduqda
+/// <see cref="IIdentityReadDbContext"/>-i inject etməlidir.
 /// </summary>
 public interface IIdentityWriteDbContext : IWriteDbContext { }

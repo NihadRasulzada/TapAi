@@ -1,6 +1,6 @@
 namespace TapAi.Module.Catalog.Persistence.Features.Cars.Commands.SubmitDraftPricing;
 
-/// <summary>Returned when the draft is published; contains the new car's ID.</summary>
+/// <summary>Draft yayımlandıqda qaytarılır; yeni avtomobilin ID-sini ehtiva edir.</summary>
 public sealed record SubmitDraftPricingResponse(
     Guid DraftId,
     int CompletedStep,

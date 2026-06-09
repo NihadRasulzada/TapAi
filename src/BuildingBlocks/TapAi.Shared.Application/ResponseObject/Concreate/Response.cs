@@ -71,7 +71,7 @@ public class Response : IResponse
         Message = message;
     }
 
-    // Fluent API methods
+    // Fluent API metodları
     public Response WithMessage(string message)
     {
         Message = message;
@@ -99,7 +99,7 @@ public class Response : IResponse
     }
 #endif
 
-    // Static factory methods
+    // Statik factory metodları
     public static Response Success(string message = "Operation completed successfully") =>
         new(ResponseStatusCode.Success, message);
 

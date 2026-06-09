@@ -3,14 +3,14 @@ using TapAi.Module.Catalog.Domain.Entity;
 namespace TapAi.Module.Catalog.Persistence.Contexts;
 
 /// <summary>
-/// Declares the entity sets exposed by the Catalog database.
-/// Consumed by <see cref="ICatalogReadDbContext"/> (read handlers) and
-/// implemented explicitly on <see cref="CatalogDbContext"/> via its EF <c>DbSet</c> properties.
+/// Catalog verilənlər bazasının təqdim etdiyi entity set-lərini elan edir.
+/// <see cref="ICatalogReadDbContext"/> (oxuma handler-ləri) tərəfindən istifadə olunur və
+/// <see cref="CatalogDbContext"/> üzərində EF <c>DbSet</c> property-ləri ilə explicit implement edilir.
 /// <para>
-/// Using <see cref="IQueryable{T}"/> instead of <c>DbSet&lt;T&gt;</c> keeps the interface
-/// free of EF Core mutation surface (<c>Add</c>, <c>Remove</c>, …).
-/// Command handlers that need to read a related entity must inject
-/// <see cref="ICatalogReadDbContext"/> alongside <see cref="ICatalogWriteDbContext"/>.
+/// <c>DbSet&lt;T&gt;</c> əvəzinə <see cref="IQueryable{T}"/> istifadəsi interfeysi
+/// EF Core mutasiya səthindən (<c>Add</c>, <c>Remove</c>, …) azad saxlayır.
+/// Əlaqəli entity oxumaq lazım olan command handler-lər <see cref="ICatalogWriteDbContext"/>
+/// ilə yanaşı <see cref="ICatalogReadDbContext"/>-i də inject etməlidir.
 /// </para>
 /// </summary>
 public interface ICatalogDbSets

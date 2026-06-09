@@ -13,7 +13,7 @@ using AppConc = TapAi.Shared.Application.ResponseObject.Concreate;
 namespace TapAi.API.Controllers;
 
 /// <summary>
-/// CRUD operations for car brands.
+/// Avtomobil markaları üçün CRUD əməliyyatları.
 /// </summary>
 [ApiController]
 [Route("api/brands")]
@@ -22,7 +22,7 @@ public sealed class BrandController(
     ICommandDispatcher commandDispatcher,
     IQueryDispatcher queryDispatcher) : ControllerBase
 {
-    /// <summary>Returns all brands ordered by name.</summary>
+    /// <summary>Bütün markaları ada görə sıralanmış şəkildə qaytarır.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(SuccessResponse<IReadOnlyList<GetAllBrandsResponse>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken ct)
@@ -33,7 +33,7 @@ public sealed class BrandController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Returns a single brand by ID.</summary>
+    /// <summary>ID-yə görə tək marka qaytarır.</summary>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(SuccessResponse<GetBrandByIdResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -45,7 +45,7 @@ public sealed class BrandController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Creates a new brand.</summary>
+    /// <summary>Yeni marka yaradır.</summary>
     [HttpPost]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(CreatedResponse<CreateBrandResponse>), StatusCodes.Status201Created)]
@@ -59,7 +59,7 @@ public sealed class BrandController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Updates an existing brand.</summary>
+    /// <summary>Mövcud markanı yeniləyir.</summary>
     [HttpPut("{id:guid}")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(SuccessResponse<UpdateBrandResponse>), StatusCodes.Status200OK)]
@@ -78,7 +78,7 @@ public sealed class BrandController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Deletes a brand. Fails if any models reference this brand.</summary>
+    /// <summary>Markanı silir. Hər hansı model bu markaya istinad edirsə uğursuz olur.</summary>
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -95,7 +95,7 @@ public sealed class BrandController(
     }
 }
 
-/// <summary>Brand name update payload.</summary>
+/// <summary>Marka adının yenilənməsi üçün yük.</summary>
 public sealed class UpdateBrandHttpRequest
 {
     /// <example>Toyota</example>

@@ -25,7 +25,7 @@ public sealed class DeleteBrandHandler(
         if (hasModels)
             return AppConc.Response.Conflict("Cannot delete brand with existing models.");
 
-        // EF Core attaches the untracked entity in Deleted state automatically.
+        // EF Core track olunmamış entity-ni avtomatik olaraq Deleted vəziyyətində attach edir.
         writeDb.Remove(brand);
         await writeDb.SaveChangesAsync(ct);
         return AppConc.Response.NoContent();

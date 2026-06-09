@@ -2,7 +2,7 @@ using TapAi.Module.Catalog.Domain.Enum;
 
 namespace TapAi.API.Controllers.Requests;
 
-/// <summary>Car detail fields for step 2.</summary>
+/// <summary>Addım 2 üçün avtomobil detal sahələri.</summary>
 public sealed class SubmitDraftDetailsHttpRequest
 {
     /// <example>3fa85f64-5717-4562-b3fc-2c963f66afa6</example>

@@ -22,7 +22,7 @@ public static class MediaModuleExtensions
         IConfiguration configuration
     )
     {
-        // ── Options ──────────────────────────────────────────────────────────
+        // ── Seçimlər (Options) ───────────────────────────────────────────────
         services.Configure<MinioSettings>(opts =>
         {
             opts.Endpoint = configuration["MinIO:Endpoint"] ?? string.Empty;
@@ -58,7 +58,7 @@ public static class MediaModuleExtensions
 
         services.AddScoped<IMinioService, MinioService>();
 
-        // ── Image resize ──────────────────────────────────────────────────────
+        // ── Şəkil ölçüləndirmə ─────────────────────────────────────────────────
         services.AddScoped<IImageResizeService, ImageResizeService>();
         services.AddHostedService<ImageResizeBackgroundService>();
 
@@ -67,13 +67,13 @@ public static class MediaModuleExtensions
             opt.UseNpgsql(configuration.GetConnectionString("CommandDb"))
         );
 
-        // QueryDbApp uses the read-only tapai_reader PostgreSQL user at runtime.
-        // EF CLI migrations use QueryDb (admin) via QueryDbContextDesignTimeFactory.
+        // QueryDbApp runtime-da yalnız oxuma hüquqlu tapai_reader PostgreSQL istifadəçisini işlədir.
+        // EF CLI migration-ları isə QueryDbContextDesignTimeFactory vasitəsilə QueryDb (admin) işlədir.
         services.AddDbContext<QueryDbContext>(opt =>
             opt.UseNpgsql(configuration.GetConnectionString("QueryDbApp"))
         );
 
-        // ── Media DbContext interface aliases ─────────────────────────────────
+        // ── Media DbContext interfeys alias-ları ──────────────────────────────
         services.AddScoped<IMediaWriteDbContext>(sp => sp.GetRequiredService<CommandDbContext>());
         services.AddScoped<IMediaReadDbContext>(sp => sp.GetRequiredService<QueryDbContext>());
 

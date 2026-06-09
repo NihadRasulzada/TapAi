@@ -13,7 +13,7 @@ public class Model : BaseEntity
         BrandId = brandId;
     }
 
-    protected Model() : base(Guid.NewGuid()) { } // EF Core
+    protected Model() : base(Guid.NewGuid()) { } // EF Core üçün
 
     public void Update(string name, Guid brandId)
     {

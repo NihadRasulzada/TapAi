@@ -27,7 +27,7 @@ public class PagedResponse<T> : Response<T>
         TotalCount = totalCount;
     }
 
-    // Fluent API methods
+    // Fluent API metodları
     public new PagedResponse<T> WithMessage(string message)
     {
         Message = message;
@@ -46,7 +46,7 @@ public class PagedResponse<T> : Response<T>
         return this;
     }
 
-    // Static factory methods
+    // Statik factory metodları
     public static PagedResponse<T> Create(T data, int pageIndex, int pageSize, int totalCount) =>
         new(data, pageIndex, pageSize, totalCount);
 

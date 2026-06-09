@@ -8,7 +8,7 @@ namespace TapAi.API.Extensions;
 public static class ControllerExtensions
 {
     /// <summary>
-    /// Handles service response with data
+    /// Data ilə servis cavabını idarə edir
     /// </summary>
     public static IActionResult HandleServiceResponse<T>(
         this ControllerBase controller,
@@ -71,7 +71,7 @@ public static class ControllerExtensions
     }
 
     /// <summary>
-    /// Handles service response without data
+    /// Datasız servis cavabını idarə edir
     /// </summary>
     public static IActionResult HandleServiceResponse(
         this ControllerBase controller,
@@ -128,7 +128,7 @@ public static class ControllerExtensions
     }
 
     /// <summary>
-    /// Handles paginated service response
+    /// Səhifələnmiş servis cavabını idarə edir
     /// </summary>
     public static IActionResult HandlePagedServiceResponse<T>(
         this ControllerBase controller,

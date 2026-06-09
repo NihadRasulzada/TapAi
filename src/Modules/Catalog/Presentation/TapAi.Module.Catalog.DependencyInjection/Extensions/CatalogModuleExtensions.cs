@@ -35,12 +35,12 @@ public static class CatalogModuleExtensions
         services.AddDbContext<CommandDbContext>(opt =>
             opt.UseNpgsql(configuration.GetConnectionString("CommandDb")));
 
-        // QueryDbApp uses the read-only tapai_reader PostgreSQL user at runtime.
-        // EF CLI migrations use QueryDb (admin) via QueryDbContextDesignTimeFactory.
+        // QueryDbApp runtime-da yalnız oxuma hüquqlu tapai_reader PostgreSQL istifadəçisini işlədir.
+        // EF CLI migration-ları isə QueryDbContextDesignTimeFactory vasitəsilə QueryDb (admin) işlədir.
         services.AddDbContext<QueryDbContext>(opt =>
             opt.UseNpgsql(configuration.GetConnectionString("QueryDbApp")));
 
-        // ── DbContext interface aliases ────────────────────────────────────────
+        // ── DbContext interfeys alias-ları ──────────────────────────────────────
         services.AddScoped<ICatalogWriteDbContext>(sp => sp.GetRequiredService<CommandDbContext>());
         services.AddScoped<ICatalogReadDbContext>(sp => sp.GetRequiredService<QueryDbContext>());
 
@@ -90,7 +90,7 @@ public static class CatalogModuleExtensions
             ICommandHandler<DeleteModelRequest, AppConc.Response>,
             DeleteModelHandler>();
 
-        // ── Cars commands ─────────────────────────────────────────────────────
+        // ── Cars command-ları ─────────────────────────────────────────────────
         services.AddScoped<
             ICommandHandler<CreateDraftRequest, AppConc.Response<CreateDraftResponse>>,
             CreateDraftHandler>();
@@ -109,7 +109,7 @@ public static class CatalogModuleExtensions
             SubmitDraftPricingHandler>();
         services.AddScoped<IValidator<SubmitDraftPricingRequest>, SubmitDraftPricingValidator>();
 
-        // ── Cars queries ──────────────────────────────────────────────────────
+        // ── Cars query-ləri ───────────────────────────────────────────────────
         services.AddScoped<
             IQueryHandler<GetCarConfigRequest, AppConc.Response<GetCarConfigResponse>>,
             GetCarConfigHandler>();

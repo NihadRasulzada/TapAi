@@ -38,10 +38,10 @@ public sealed class ValidationPipelineBehavior<TCommand, TResponse>(
     }
 
     /// <summary>
-    /// Creates a validation-error TResponse without knowing the concrete type at compile time.
-    /// Both <see cref="Response"/> and <see cref="Response{T}"/> expose a static
-    /// <c>ValidationError(IEnumerable&lt;CustomValidationError&gt;)</c> factory — we call it
-    /// via a one-time cached MethodInfo lookup.
+    /// Konkret tipi kompilyasiya zamanı bilmədən validation-error TResponse yaradır.
+    /// Həm <see cref="Response"/>, həm də <see cref="Response{T}"/> statik
+    /// <c>ValidationError(IEnumerable&lt;CustomValidationError&gt;)</c> factory-si təqdim edir —
+    /// onu MethodInfo axtarışı vasitəsilə çağırırıq.
     /// </summary>
     private static TResponse CreateValidationError(IEnumerable<CustomValidationError> errors)
     {
@@ -55,8 +55,8 @@ public sealed class ValidationPipelineBehavior<TCommand, TResponse>(
             BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly,
             [typeof(IEnumerable<CustomValidationError>)]);
 
-        // Fallback: if TResponse is some subclass that doesn't declare its own factory,
-        // construct a Response with the right status and cast.
+        // Ehtiyat yol: əgər TResponse öz factory-sini elan etməyən hansısa alt-sinifdirsə,
+        // düzgün status ilə Response yaradıb cast edirik.
         if (method is null)
             return (TResponse)(object)new Response(ResponseStatusCode.ValidationError)
             {

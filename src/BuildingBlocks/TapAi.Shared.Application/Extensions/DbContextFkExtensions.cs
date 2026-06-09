@@ -23,7 +23,7 @@ public static class DbContextFkExtensions
             Type dependentType = fk.DeclaringEntityType.ClrType;
             string fkProperty = fk.Properties.First().Name;
 
-            // ✅ DbContext.Set<DependentType>()
+            // ✅ DbContext.Set<DependentType>() — asılı tipin DbSet-ini götür
             MethodInfo setMethod = typeof(AppDbContext)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .First(m => m.Name == "Set" && m.IsGenericMethod && m.GetParameters().Length == 0);

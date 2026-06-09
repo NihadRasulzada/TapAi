@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace TapAi.API.Controllers.Requests;
 
-/// <summary>Multipart form body for the images step.</summary>
+/// <summary>Şəkillər addımı üçün multipart form gövdəsi.</summary>
 public sealed class SubmitDraftImagesHttpRequest
 {
-    /// <summary>One or more car images (JPEG, PNG, WebP or GIF).</summary>
+    /// <summary>Bir və ya bir neçə avtomobil şəkli (JPEG, PNG, WebP və ya GIF).</summary>
     public IFormFileCollection? Images { get; set; }
 }

@@ -3,8 +3,8 @@ using TapAi.Shared.Application.Context;
 namespace TapAi.Module.Catalog.Persistence.Contexts;
 
 /// <summary>
-/// Read-only view of the Catalog database.
-/// Inject this in query handlers and in command handlers that need to
-/// read a related entity without loading it into the write-side change tracker.
+/// Catalog verilənlər bazasının yalnız oxuma görünüşü.
+/// Bunu query handler-lərində və əlaqəli entity-ni yazma tərəfindəki change tracker-ə
+/// yükləmədən oxumaq lazım olan command handler-lərində inject edin.
 /// </summary>
 public interface ICatalogReadDbContext : IReadDbContext, ICatalogDbSets { }

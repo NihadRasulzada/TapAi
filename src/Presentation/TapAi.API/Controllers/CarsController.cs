@@ -15,7 +15,7 @@ using AppConc = TapAi.Shared.Application.ResponseObject.Concreate;
 namespace TapAi.API.Controllers;
 
 /// <summary>
-/// Backend-driven multi-step car listing onboarding.
+/// Backend tərəfindən idarə olunan çoxaddımlı avtomobil elanı onboarding-i.
 /// </summary>
 [ApiController]
 [Route("api/cars")]
@@ -29,7 +29,7 @@ public sealed class CarsController(
     private Guid CallerId => currentUser.Id;
 
     /// <summary>
-    /// Returns the step definitions for the onboarding flow (public).
+    /// Onboarding axını üçün addım təriflərini qaytarır (açıq/public).
     /// </summary>
     [HttpGet]
     [AllowAnonymous]
@@ -43,7 +43,7 @@ public sealed class CarsController(
     }
 
     /// <summary>
-    /// Creates a new draft and returns its ID.
+    /// Yeni draft yaradır və onun ID-sini qaytarır.
     /// </summary>
     [HttpPost("drafts")]
     [ProducesResponseType(typeof(CreatedResponse<CreateDraftResponse>), StatusCodes.Status201Created)]
@@ -57,7 +57,7 @@ public sealed class CarsController(
     }
 
     /// <summary>
-    /// Returns the current state of a draft (resume support).
+    /// Draft-ın cari vəziyyətini qaytarır (davam etdirmə dəstəyi).
     /// </summary>
     [HttpGet("drafts/{draftId:guid}")]
     [ProducesResponseType(typeof(SuccessResponse<GetDraftResponse>), StatusCodes.Status200OK)]
@@ -72,7 +72,7 @@ public sealed class CarsController(
     }
 
     /// <summary>
-    /// Step 1 — upload car images.
+    /// Addım 1 — avtomobil şəkillərini yüklə.
     /// </summary>
     [HttpPost("drafts/{draftId:guid}/images")]
     [Consumes("multipart/form-data")]
@@ -92,7 +92,7 @@ public sealed class CarsController(
     }
 
     /// <summary>
-    /// Step 2 — submit car details (brand, model, year, mileage, fuel type, transmission).
+    /// Addım 2 — avtomobil detallarını göndər (marka, model, il, yürüş, yanacaq növü, transmissiya).
     /// </summary>
     [HttpPost("drafts/{draftId:guid}/details")]
     [ProducesResponseType(typeof(SuccessResponse<SubmitDraftDetailsResponse>), StatusCodes.Status200OK)]
@@ -115,7 +115,7 @@ public sealed class CarsController(
     }
 
     /// <summary>
-    /// Step 3 — submit price and description, publishes the car listing.
+    /// Addım 3 — qiymət və təsviri göndər, avtomobil elanını yayımlayır.
     /// </summary>
     [HttpPost("drafts/{draftId:guid}/pricing")]
     [ProducesResponseType(typeof(CreatedResponse<SubmitDraftPricingResponse>), StatusCodes.Status201Created)]

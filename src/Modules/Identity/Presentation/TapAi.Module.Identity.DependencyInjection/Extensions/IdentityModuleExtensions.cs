@@ -31,7 +31,7 @@ public static class IdentityModuleExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // ── Options ───────────────────────────────────────────────────────────
+        // ── Seçimlər (Options) ────────────────────────────────────────────────
         services.AddOptions<JwtOptions>()
             .Bind(configuration.GetSection(JwtOptions.SectionName))
             .ValidateDataAnnotations()
@@ -65,7 +65,7 @@ public static class IdentityModuleExtensions
         services.AddDbContext<QueryDbContext>(opt =>
             opt.UseNpgsql(configuration.GetConnectionString("QueryDbApp")));
 
-        // ── DbContext interface aliases ────────────────────────────────────────
+        // ── DbContext interfeys alias-ları ──────────────────────────────────────
         services.AddScoped<IIdentityWriteDbContext>(sp => sp.GetRequiredService<CommandDbContext>());
         services.AddScoped<IIdentityReadDbContext>(sp => sp.GetRequiredService<QueryDbContext>());
 
@@ -75,7 +75,7 @@ public static class IdentityModuleExtensions
         services.AddSingleton<IConnectionMultiplexer>(_ =>
             ConnectionMultiplexer.Connect(redisConnStr));
 
-        // ── Services ──────────────────────────────────────────────────────────
+        // ── Xidmətlər (Services) ──────────────────────────────────────────────
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
         services.AddScoped<IRegistrationJwtService, RegistrationJwtService>();
@@ -86,7 +86,7 @@ public static class IdentityModuleExtensions
         // Modullararası istifadəçi statusu yoxlaması (Catalog onboarding üçün).
         services.AddScoped<IUserAccessGuard, UserAccessGuard>();
 
-        // ── Handlers ──────────────────────────────────────────────────────────
+        // ── Handler-lər ───────────────────────────────────────────────────────
         services.AddScoped<
             ICommandHandler<RegisterStartRequest, AppConc.Response<RegisterStartResponse>>,
             RegisterStartHandler>();
@@ -119,7 +119,7 @@ public static class IdentityModuleExtensions
             ICommandHandler<UnblockUserRequest, AppConc.Response>,
             UnblockUserHandler>();
 
-        // ── Background Workers ────────────────────────────────────────────────
+        // ── Arxa-fon işçiləri (Background Workers) ────────────────────────────
         services.AddHostedService<EmailConsumerWorker>();
 
         return services;

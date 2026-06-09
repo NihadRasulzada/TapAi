@@ -13,7 +13,7 @@ using AppConc = TapAi.Shared.Application.ResponseObject.Concreate;
 namespace TapAi.API.Controllers;
 
 /// <summary>
-/// CRUD operations for car models.
+/// Avtomobil modelləri üçün CRUD əməliyyatları.
 /// </summary>
 [ApiController]
 [Route("api/models")]
@@ -22,7 +22,7 @@ public sealed class ModelController(
     ICommandDispatcher commandDispatcher,
     IQueryDispatcher queryDispatcher) : ControllerBase
 {
-    /// <summary>Returns all models, optionally filtered by brand.</summary>
+    /// <summary>Bütün modelləri qaytarır, istəyə görə markaya görə filtrlənir.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(SuccessResponse<IReadOnlyList<GetAllModelsResponse>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] Guid? brandId, CancellationToken ct)
@@ -33,7 +33,7 @@ public sealed class ModelController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Returns a single model by ID.</summary>
+    /// <summary>ID-yə görə tək model qaytarır.</summary>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(SuccessResponse<GetModelByIdResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -45,7 +45,7 @@ public sealed class ModelController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Creates a new model under a brand.</summary>
+    /// <summary>Marka altında yeni model yaradır.</summary>
     [HttpPost]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(CreatedResponse<CreateModelResponse>), StatusCodes.Status201Created)]
@@ -60,7 +60,7 @@ public sealed class ModelController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Updates an existing model.</summary>
+    /// <summary>Mövcud modeli yeniləyir.</summary>
     [HttpPut("{id:guid}")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(SuccessResponse<UpdateModelResponse>), StatusCodes.Status200OK)]
@@ -79,7 +79,7 @@ public sealed class ModelController(
         return this.HandleServiceResponse(result);
     }
 
-    /// <summary>Deletes a model. Fails if any cars reference this model.</summary>
+    /// <summary>Modeli silir. Hər hansı avtomobil bu modelə istinad edirsə uğursuz olur.</summary>
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -96,7 +96,7 @@ public sealed class ModelController(
     }
 }
 
-/// <summary>Model update payload.</summary>
+/// <summary>Model yenilənməsi üçün yük.</summary>
 public sealed class UpdateModelHttpRequest
 {
     /// <example>Camry</example>

@@ -1,35 +1,35 @@
 namespace TapAi.Shared.Application.Context;
 
 /// <summary>
-/// Marker interface for write (command) database contexts.
-/// Intentionally exposes <b>no</b> queryable surface (<c>Set&lt;T&gt;</c> is absent)
-/// so that a command handler that tries to read through this interface will
-/// not compile.  All reads must go through <see cref="IReadDbContext"/>.
+/// Yazma (command) verilənlər bazası kontekstləri üçün marker interfeysi.
+/// Bilərəkdən <b>heç bir</b> sorğu səthi təqdim etmir (<c>Set&lt;T&gt;</c> yoxdur) —
+/// belə ki, bu interfeys üzərindən oxumağa çalışan command handler kompilyasiya
+/// olunmayacaq. Bütün oxumalar <see cref="IReadDbContext"/> üzərindən getməlidir.
 /// <para>
-/// Load-to-modify pattern:
+/// Load-to-modify (yüklə-dəyiş) nümunəsi:
 /// <code>
 /// var entity = await readDb.Entities.AsNoTracking().FirstOrDefaultAsync(...);
-/// writeDb.Attach(entity);   // tell the write-side change tracker about it
-/// entity.DoSomething();     // mutate via domain method
+/// writeDb.Attach(entity);   // yazma tərəfindəki change tracker-ə tanıt
+/// entity.DoSomething();     // domain metodu ilə dəyiş
 /// await writeDb.SaveChangesAsync(ct);
 /// </code>
 /// </para>
 /// </summary>
 public interface IWriteDbContext
 {
-    // ── Persistence ─────────────────────────────────────────────────────────
+    // ── Saxlama (persistence) ───────────────────────────────────────────────
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-    // ── Attach (load-to-modify) ──────────────────────────────────────────────
+    // ── Attach (yüklə-dəyiş) ──────────────────────────────────────────────────
     /// <summary>
-    /// Attaches an entity that was loaded untracked (e.g. via <c>AsNoTracking()</c>
-    /// from <see cref="IReadDbContext"/>) to the write-side change tracker.
-    /// The entity enters <c>Unchanged</c> state; subsequent property mutations are
-    /// detected automatically before <see cref="SaveChangesAsync"/>.
+    /// Track olunmadan yüklənmiş entity-ni (məs. <see cref="IReadDbContext"/>-dən
+    /// <c>AsNoTracking()</c> ilə) yazma tərəfindəki change tracker-ə əlavə edir.
+    /// Entity <c>Unchanged</c> vəziyyətinə keçir; sonrakı property dəyişiklikləri
+    /// <see cref="SaveChangesAsync"/>-dən əvvəl avtomatik aşkarlanır.
     /// </summary>
     void Attach<TEntity>(TEntity entity) where TEntity : class;
 
-    /// <summary>Attaches multiple untracked entities to the write-side change tracker.</summary>
+    /// <summary>Track olunmamış bir neçə entity-ni yazma tərəfindəki change tracker-ə əlavə edir.</summary>
     void AttachRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;
 
     // ── Add ─────────────────────────────────────────────────────────────────
@@ -38,9 +38,9 @@ public interface IWriteDbContext
 
     // ── Remove ──────────────────────────────────────────────────────────────
     /// <summary>
-    /// Marks the entity for deletion.  If the entity is not yet tracked it is
-    /// first attached in <c>Deleted</c> state, so loading it via
-    /// <see cref="IReadDbContext"/> before calling this method is sufficient.
+    /// Entity-ni silinmək üçün işarələyir. Əgər entity hələ track olunmayıbsa,
+    /// əvvəlcə <c>Deleted</c> vəziyyətində attach edilir; ona görə də bu metoddan
+    /// əvvəl onu <see cref="IReadDbContext"/> üzərindən yükləmək kifayətdir.
     /// </summary>
     void Remove<TEntity>(TEntity entity) where TEntity : class;
 }

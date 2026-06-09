@@ -35,7 +35,7 @@ public class Response<T> : Response, IResponse<T>
         ValidationErrors = errors;
     }
 
-    // Fluent API methods
+    // Fluent API metodları
     public new Response<T> WithMessage(string message)
     {
         Message = message;
@@ -69,7 +69,7 @@ public class Response<T> : Response, IResponse<T>
     }
 #endif
 
-    // Static factory methods
+    // Statik factory metodları
     public static Response<T> Success(
         T data,
         string message = "Operation completed successfully"

@@ -3,11 +3,11 @@ using TapAi.Module.Identity.Domain.Entity;
 namespace TapAi.Module.Identity.Persistence.Contexts;
 
 /// <summary>
-/// Declares the entity sets exposed by the Identity database.
-/// Consumed by <see cref="IIdentityReadDbContext"/> (read handlers) and
-/// implemented explicitly on <see cref="IdentityDbContext"/> via its EF DbSet properties.
-/// Using <see cref="IQueryable{T}"/> instead of DbSet keeps the interface
-/// free of EF Core mutation surface.
+/// Identity verilənlər bazasının təqdim etdiyi entity set-lərini elan edir.
+/// <see cref="IIdentityReadDbContext"/> (oxuma handler-ləri) tərəfindən istifadə olunur və
+/// <see cref="IdentityDbContext"/> üzərində EF DbSet property-ləri ilə explicit implement edilir.
+/// DbSet əvəzinə <see cref="IQueryable{T}"/> istifadəsi interfeysi
+/// EF Core mutasiya səthindən azad saxlayır.
 /// </summary>
 public interface IIdentityDbSets
 {
